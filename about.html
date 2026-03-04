@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acerca de Ipiak · Minilecciones de lenguas indígenas amazónicas</title>
+  <meta name="description"
+    content="Conoce la misión de Ipiak: llevar lenguas indígenas amazónicas al mundo digital con minilecciones interactivas de calidad profesional." />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script type="text/javascript" data-cmp-ab="1"
+    src="https://cdn.consentmanager.net/delivery/autoblocking/e576a02a02f18.js"
+    data-cmp-host="a.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="0"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PF1TJ809W5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-PF1TJ809W5');
+  </script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#C05746",
+            "primary-dark": "#9A4537",
+            "background-light": "#F9F7F5",
+            "background-dark": "#2C2422",
+            "earth-brown": "#8C7B75",
+            "text-main": "#4A3F3B",
+            "shuar-sand": "#EBE5DF",
+          },
+          fontFamily: {
+            sans: ["Lato", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    .font-serif {
+      font-family: "Playfair Display", serif;
+    }
+
+    .indigenous-pattern {
+      background-image: radial-gradient(circle at 2px 2px,
+          rgba(192, 87, 70, 0.08) 1px,
+          transparent 0);
+      background-size: 24px 24px;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      left: 15px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #C05746, #EBE5DF);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-text-main dark:text-white transition-colors duration-300 min-h-screen">
+  <div class="layout-container flex flex-col min-h-screen">
+    <!-- HEADER -->
+    <header
+      class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#f4f0f0] dark:border-white/10 px-4 md:px-20 lg:px-40 py-3 md:py-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="block w-16 h-16 md:w-16 md:h-16" aria-label="Volver a la página principal">
+          <img src="logo.png" alt="Ipiak" class="w-full h-full object-contain" />
+        </a>
+      </div>
+      <div class="flex items-center gap-3 md:gap-6">
+        <!-- Lang toggle -->
+        <div
+          class="flex items-center rounded-full border border-shuar-sand dark:border-white/10 overflow-hidden text-xs font-semibold">
+          <button data-lang-btn="es" class="px-3 py-1.5 transition-colors bg-primary text-white"
+            aria-label="Español">ES</button>
+          <button data-lang-btn="en" class="px-3 py-1.5 transition-colors text-text-main dark:text-gray-300"
+            aria-label="English">EN</button>
+        </div>
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors"
+            href="index.html" data-i18n="nav_lessons">Lecciones</a>
+          <a class="text-primary dark:text-primary font-semibold hover:text-primary/90 transition-colors"
+            href="about.html" data-i18n="nav_about">Acerca de</a>
+        </nav>
+        <button type="button"
+          class="hidden md:inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary-dark text-white text-sm font-medium px-4 py-2 transition-colors"
+          data-open-community-modal>
+          <span class="material-symbols-outlined text-base">group</span>
+          <span data-i18n="nav_community">Únete a la comunidad</span>
+        </button>
+        <button id="menu-toggle" type="button"
+          class="inline-flex md:hidden items-center justify-center rounded-full border border-shuar-sand bg-white/80 text-text-main w-10 h-10"
+          aria-label="Abrir menú">
+          <span class="material-symbols-outlined text-2xl" id="menu-toggle-icon">menu</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu"
+      class="md:hidden hidden border-b border-[#f4f0f0] dark:border-white/10 bg-background-light dark:bg-background-dark px-4 pb-4">
+      <nav class="flex flex-col gap-3 text-sm pt-2">
+        <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors" href="index.html"
+          data-i18n="nav_lessons">Lecciones</a>
+        <a class="text-primary dark:text-primary font-semibold hover:text-primary/90 transition-colors"
+          href="about.html" data-i18n="nav_about">Acerca de</a>
+        <button type="button"
+          class="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary-dark text-white text-sm font-medium px-4 py-2 transition-colors"
+          data-open-community-modal>
+          <span class="material-symbols-outlined text-base">group</span>
+          <span data-i18n="nav_community">Únete a la comunidad</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- MAIN -->
+    <main class="flex-1 px-6 md:px-20 lg:px-40 py-12 md:py-20 indigenous-pattern">
+      <div class="max-w-[960px] mx-auto space-y-12">
+
+        <!-- ABOUT HEADER -->
+        <section class="space-y-4">
+          <h1 class="text-[#181111] dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-[-0.03em]"
+            data-i18n="about_title">
+            Acerca de Ipiak
+          </h1>
+          <p class="text-earth-brown dark:text-gray-400 text-lg font-normal leading-relaxed max-w-[720px]"
+            data-i18n="about_intro">
+            Ipiak es la primera plataforma digital dedicada a lenguas indígenas
+            amazónicas, con el mismo nivel de diseño y tecnología que cualquier
+            herramienta educativa profesional.
+          </p>
+        </section>
+
+        <!-- WHAT IS IPIAK? -->
+        <section class="space-y-5">
+          <h2 class="text-[#181111] dark:text-white text-2xl md:text-3xl font-semibold" data-i18n="about_what_title">
+            ¿Qué es Ipiak?
+          </h2>
+          <div class="space-y-4 text-earth-brown dark:text-gray-300 text-base leading-relaxed">
+            <p data-i18n="about_what_p1">
+              Durante años, aprender idiomas como el shuar significaba buscar PDFs
+              escaneados, libros físicos difíciles de conseguir, o documentos
+              académicos inaccesibles para el público general. Los recursos
+              existían, pero con diseño anticuado, interfaces poco funcionales, y
+              poca atención a la experiencia del usuario.
+            </p>
+            <p data-i18n="about_what_p2">
+              Esa falta de calidad no es casual. Refleja una percepción histórica
+              de que las lenguas indígenas no merecen el mismo nivel de inversión,
+              diseño, o profesionalismo que otros idiomas.
+            </p>
+            <p data-i18n="about_what_p3">Ipiak desafía esa idea.</p>
+            <p data-i18n="about_what_p4">
+              Trabajamos directamente con hablantes nativos para crear contenido
+              auténtico, práctico y culturalmente respetuoso. Usamos tecnología
+              moderna, diseño cuidado, y metodologías pedagógicas efectivas.
+              Porque las lenguas indígenas merecen herramientas digitales de primer
+              nivel.
+            </p>
+            <p data-i18n="about_what_p5">
+              Empezamos con shuar. Próximamente: kichwa, waorani, achuar, sapara, y otras
+              lenguas amazónicas que históricamente han sido ignoradas por
+              plataformas educativas comerciales.
+            </p>
+            <p data-i18n="about_what_p6">
+              Ipiak demuestra que los pueblos indígenas no solo preservan su
+              cultura—también pueden liderar la innovación digital para sus propias
+              lenguas.
+            </p>
+          </div>
+        </section>
+
+        <!-- WHY MINI-LESSONS? -->
+        <section class="space-y-5">
+          <h2 class="text-[#181111] dark:text-white text-2xl md:text-3xl font-semibold" data-i18n="about_why_title">
+            ¿Por qué minilecciones?
+          </h2>
+          <div class="space-y-4 text-earth-brown dark:text-gray-300 text-base leading-relaxed">
+            <p data-i18n="about_why_p1">
+              Las minilecciones están diseñadas para acercarte a lenguas indígenas amazónicas de
+              forma respetuosa, práctica y cercana. Cada lección está pensada para
+              que puedas aprender en pocos minutos, desde cualquier lugar.
+            </p>
+            <p data-i18n="about_why_p2">
+              El foco está en situaciones reales: saludos, presentaciones,
+              preguntas cotidianas y expresiones útiles para viajeros, educadores y
+              personas curiosas por la diversidad lingüística.
+            </p>
+            <p data-i18n="about_why_p3">
+              La intención de Ipiak es que cada sesión te deje al menos una
+              expresión nueva que puedas recordar, pronunciar y usar.
+            </p>
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="bg-white/70 dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl p-4">
+                <h3 class="text-[#181111] dark:text-white font-semibold mb-2" data-i18n="about_feat1_title">
+                  Pequeñas dosis de contenido
+                </h3>
+                <p class="text-sm text-earth-brown dark:text-gray-300" data-i18n="about_feat1_desc">
+                  Contenido breve, fácil de repetir y volver a visitar cuando lo
+                  necesites.
+                </p>
+              </div>
+              <div class="bg-white/70 dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl p-4">
+                <h3 class="text-[#181111] dark:text-white font-semibold mb-2" data-i18n="about_feat2_title">
+                  Audio y contexto
+                </h3>
+                <p class="text-sm text-earth-brown dark:text-gray-300" data-i18n="about_feat2_desc">
+                  Audio y ejemplos que apoyan la pronunciación y el uso real de
+                  cada expresión.
+                </p>
+              </div>
+              <div class="bg-white/70 dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl p-4">
+                <h3 class="text-[#181111] dark:text-white font-semibold mb-2" data-i18n="about_feat3_title">
+                  Diseño sencillo
+                </h3>
+                <p class="text-sm text-earth-brown dark:text-gray-300" data-i18n="about_feat3_desc">
+                  Una interfaz limpia para que nada distraiga de lo importante: la
+                  lengua.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ROADMAP -->
+        <section class="space-y-5">
+          <h2 class="text-[#181111] dark:text-white text-2xl md:text-3xl font-semibold" data-i18n="roadmap_title">
+            Nuestro Camino
+          </h2>
+          <p class="text-earth-brown dark:text-gray-400 text-base" data-i18n="roadmap_subtitle">
+            El plan de Ipiak para llevar más lenguas indígenas al mundo digital.
+          </p>
+          <div class="relative pl-10 space-y-6">
+            <!-- Timeline line -->
+            <div class="roadmap-line"></div>
+
+            <!-- Phase 1 -->
+            <div class="relative">
+              <div
+                class="absolute -left-10 top-1 w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-md z-10">
+                <span class="material-symbols-outlined text-base">check</span>
+              </div>
+              <div class="bg-white/70 dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl p-5">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400"
+                    data-i18n="roadmap_phase">Fase</span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400">1
+                    —</span>
+                  <span class="text-text-main dark:text-white font-serif font-bold text-lg"
+                    data-i18n="roadmap_1_title">Shuar</span>
+                  <span
+                    class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800 px-2 py-0.5 rounded-md">
+                    <span class="material-symbols-outlined text-[12px]">check_circle</span>
+                    <span data-i18n="roadmap_1_status">Completada</span>
+                  </span>
+                </div>
+                <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="roadmap_1_desc">
+                  Primeras minilecciones en shuar: saludos, presentaciones y expresiones cotidianas.
+                </p>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="relative">
+              <div
+                class="absolute -left-10 top-1 w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center text-xs font-bold shadow-md z-10">
+                <span class="material-symbols-outlined text-base">sync</span>
+              </div>
+              <div class="bg-white/70 dark:bg-white/5 border border-amber-200 dark:border-amber-800/50 rounded-xl p-5">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400"
+                    data-i18n="roadmap_phase">Fase</span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400">2
+                    —</span>
+                  <span class="text-text-main dark:text-white font-serif font-bold text-lg"
+                    data-i18n="roadmap_2_title">Kichwa</span>
+                  <span
+                    class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 border border-amber-200 dark:border-amber-800 px-2 py-0.5 rounded-md">
+                    <span class="material-symbols-outlined text-[12px]">schedule</span>
+                    <span data-i18n="roadmap_2_status">En desarrollo</span>
+                  </span>
+                </div>
+                <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="roadmap_2_desc">
+                  Nuevo idioma en desarrollo con hablantes nativos de kichwa amazónico.
+                </p>
+              </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="relative">
+              <div
+                class="absolute -left-10 top-1 w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 text-white flex items-center justify-center text-xs font-bold shadow-md z-10">
+                <span class="material-symbols-outlined text-base">event_note</span>
+              </div>
+              <div class="bg-white/70 dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl p-5">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400"
+                    data-i18n="roadmap_phase">Fase</span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400">3
+                    —</span>
+                  <span class="text-text-main dark:text-white font-serif font-bold text-lg"
+                    data-i18n="roadmap_3_title">Más lenguas amazónicas</span>
+                  <span
+                    class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 dark:bg-gray-800/30 dark:text-gray-400 border border-gray-200 dark:border-gray-700 px-2 py-0.5 rounded-md">
+                    <span class="material-symbols-outlined text-[12px]">event_note</span>
+                    <span data-i18n="roadmap_3_status">Planificada</span>
+                  </span>
+                </div>
+                <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="roadmap_3_desc">
+                  Expansión a waorani, achuar, sapara y otras lenguas de la Amazonía.
+                </p>
+              </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="relative">
+              <div
+                class="absolute -left-10 top-1 w-8 h-8 rounded-full bg-primary/30 text-primary flex items-center justify-center text-xs font-bold shadow-md z-10">
+                <span class="material-symbols-outlined text-base">rocket_launch</span>
+              </div>
+              <div class="bg-white/70 dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl p-5">
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400"
+                    data-i18n="roadmap_phase">Fase</span>
+                  <span class="text-xs font-bold uppercase tracking-wider text-earth-brown dark:text-gray-400">4
+                    —</span>
+                  <span class="text-text-main dark:text-white font-serif font-bold text-lg"
+                    data-i18n="roadmap_4_title">Plataforma completa</span>
+                  <span
+                    class="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 dark:bg-gray-800/30 dark:text-gray-400 border border-gray-200 dark:border-gray-700 px-2 py-0.5 rounded-md">
+                    <span class="material-symbols-outlined text-[12px]">rocket_launch</span>
+                    <span data-i18n="roadmap_4_status">Futuro</span>
+                  </span>
+                </div>
+                <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="roadmap_4_desc">
+                  Juegos interactivos, comunidades por idioma, certificados de aprendizaje y app móvil.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      class="border-t border-shuar-sand dark:border-white/10 px-6 md:px-20 lg:px-40 py-10 bg-background-light dark:bg-background-dark">
+      <div class="max-w-[960px] mx-auto space-y-6">
+        <div class="grid md:grid-cols-2 gap-6 items-start">
+          <div class="flex flex-col items-center md:items-start gap-3 text-sm">
+            <div class="flex flex-wrap items-center gap-3">
+              <a href="index.html#lecciones"
+                class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
+                data-i18n="footer_lessons">Lecciones</a>
+              <a href="about.html" class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
+                data-i18n="footer_about">Acerca de</a>
+              <a href="mailto:nu@ipiak.com"
+                class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
+                data-i18n="footer_contact">Contacto: nu@ipiak.com</a>
+            </div>
+          </div>
+          <div class="flex flex-col items-center md:items-end gap-3">
+            <a href="https://chat.whatsapp.com/HT0oFeE58tJ98yWShrnSZw" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#1eb257] text-white text-sm font-medium px-4 py-2 transition-colors">
+              <span class="material-symbols-outlined text-base">chat</span>
+              <span data-i18n="footer_whatsapp">Únete a nuestra comunidad de WhatsApp</span>
+            </a>
+            <a href="https://instagram.com/_ipiak" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full border border-shuar-sand text-text-main dark:text-white hover:border-primary hover:text-primary text-sm font-medium px-4 py-2 transition-colors">
+              <span class="material-symbols-outlined text-base">camera_alt</span>
+              <span data-i18n="footer_instagram">Síguenos: Instagram</span>
+            </a>
+          </div>
+        </div>
+        <div class="text-earth-brown dark:text-gray-500 text-xs text-center" data-i18n="footer_copy">
+          Ipiak · 2026
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- COMMUNITY MODAL -->
+  <div id="community-modal"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4 hidden z-50">
+    <div
+      class="bg-background-light dark:bg-background-dark rounded-2xl shadow-xl max-w-sm w-full p-6 border border-shuar-sand dark:border-white/10">
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-text-main dark:text-white text-xl font-serif font-semibold mb-1" data-i18n="modal_title">
+            Únete a la comunidad
+          </h2>
+          <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="modal_subtitle">
+            Súmate al grupo y recibe novedades de nuevas minilecciones y recursos.
+          </p>
+        </div>
+        <button type="button" id="community-modal-close"
+          class="rounded-full w-8 h-8 flex items-center justify-center bg-white/80 dark:bg-white/10 text-text-main dark:text-white border border-shuar-sand/60"
+          aria-label="Cerrar">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+      <div class="space-y-3">
+        <a href="https://chat.whatsapp.com/HT0oFeE58tJ98yWShrnSZw" target="_blank" rel="noopener noreferrer"
+          class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] hover:bg-[#1eb257] text-white text-sm font-medium py-2.5 px-4 transition-colors">
+          <span class="material-symbols-outlined text-base">chat</span>
+          <span data-i18n="modal_whatsapp">Únete al grupo de WhatsApp</span>
+        </a>
+        <a href="https://instagram.com/_ipiak" target="_blank" rel="noopener noreferrer"
+          class="w-full inline-flex items-center justify-center gap-2 rounded-full border border-shuar-sand text-text-main dark:text-white hover:border-primary hover:text-primary text-sm font-medium py-2.5 px-4 transition-colors">
+          <span class="material-symbols-outlined text-base">camera_alt</span>
+          <span data-i18n="modal_instagram">Síguenos en Instagram</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="shared.js"></script>
+</body>
+
+</html>

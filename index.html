@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Ipiak - Lecciones de Lenguas Indígenas Amazónicas</title>
+  <meta name="description"
+    content="Ipiak: plataforma de minilecciones interactivas para aprender lenguas indígenas amazónicas como shuar, kichwa y waorani." />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Lato:wght@300;400;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script type="text/javascript" data-cmp-ab="1"
+    src="https://cdn.consentmanager.net/delivery/autoblocking/e576a02a02f18.js"
+    data-cmp-host="a.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="0"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PF1TJ809W5"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-PF1TJ809W5');
+  </script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#C05746",
+            "primary-dark": "#9A4537",
+            "background-light": "#F9F7F5",
+            "background-dark": "#2C2422",
+            "earth-brown": "#8C7B75",
+            "text-main": "#4A3F3B",
+            "shuar-sand": "#EBE5DF",
+          },
+          fontFamily: {
+            sans: ["Lato", "sans-serif"],
+            serif: ["Playfair Display", "serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "0.5rem",
+            xl: "0.75rem",
+            full: "9999px",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    body {
+      font-family: "Lato", sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    .font-serif {
+      font-family: "Playfair Display", serif;
+    }
+
+    .indigenous-pattern {
+      background-image: radial-gradient(circle at 2px 2px,
+          rgba(192, 87, 70, 0.08) 1px,
+          transparent 0);
+      background-size: 24px 24px;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark text-[#181111] dark:text-white transition-colors duration-300 min-h-screen">
+  <div class="layout-container flex flex-col min-h-screen">
+    <!-- HEADER -->
+    <header
+      class="flex items-center justify-between whitespace-nowrap border-b border-solid border-[#f4f0f0] dark:border-white/10 px-4 md:px-20 lg:px-40 py-3 md:py-4 bg-background-light dark:bg-background-dark sticky top-0 z-50">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="block w-16 h-16 md:w-16 md:h-16" aria-label="Volver a la página principal">
+          <img src="logo.png" alt="Ipiak" class="w-full h-full object-contain" />
+        </a>
+      </div>
+      <div class="flex items-center gap-3 md:gap-6">
+        <!-- Lang toggle -->
+        <div
+          class="flex items-center rounded-full border border-shuar-sand dark:border-white/10 overflow-hidden text-xs font-semibold">
+          <button data-lang-btn="es" class="px-3 py-1.5 transition-colors bg-primary text-white"
+            aria-label="Español">ES</button>
+          <button data-lang-btn="en" class="px-3 py-1.5 transition-colors text-text-main dark:text-gray-300"
+            aria-label="English">EN</button>
+        </div>
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors"
+            href="#lecciones" data-i18n="nav_lessons">Lecciones</a>
+          <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors"
+            href="about.html" data-i18n="nav_about">Acerca de</a>
+        </nav>
+        <button type="button"
+          class="hidden md:inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary-dark text-white text-sm font-medium px-4 py-2 transition-colors"
+          data-open-community-modal>
+          <span class="material-symbols-outlined text-base">group</span>
+          <span data-i18n="nav_community">Únete a la comunidad</span>
+        </button>
+        <button id="menu-toggle" type="button"
+          class="inline-flex md:hidden items-center justify-center rounded-full border border-shuar-sand bg-white/80 text-text-main w-10 h-10"
+          aria-label="Abrir menú">
+          <span class="material-symbols-outlined text-2xl" id="menu-toggle-icon">menu</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <div id="mobile-menu"
+      class="md:hidden hidden border-b border-[#f4f0f0] dark:border-white/10 bg-background-light dark:bg-background-dark px-4 pb-4">
+      <nav class="flex flex-col gap-3 text-sm pt-2">
+        <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors" href="#lecciones"
+          data-i18n="nav_lessons">Lecciones</a>
+        <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors" href="about.html"
+          data-i18n="nav_about">Acerca de</a>
+        <button type="button"
+          class="mt-1 inline-flex items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary-dark text-white text-sm font-medium px-4 py-2 transition-colors"
+          data-open-community-modal>
+          <span class="material-symbols-outlined text-base">group</span>
+          <span data-i18n="nav_community">Únete a la comunidad</span>
+        </button>
+      </nav>
+    </div>
+
+    <!-- MAIN -->
+    <main class="flex-1 px-6 md:px-20 lg:px-40 py-12 md:py-20 indigenous-pattern">
+      <div class="max-w-[960px] mx-auto">
+
+        <!-- HERO -->
+        <div class="mb-12">
+          <h1
+            class="text-[#181111] dark:text-white text-4xl md:text-5xl font-black leading-tight tracking-[-0.033em] mb-4">
+            <span data-i18n="hero_title_1">Aprende lenguas indígenas amazónicas con</span>
+            <span class="text-primary" data-i18n="hero_title_2">minilecciones interactivas</span>
+          </h1>
+          <p class="text-earth-brown dark:text-gray-400 text-lg font-normal leading-relaxed max-w-[640px]"
+            data-i18n="hero_subtitle">
+            Explora lecciones breves y visuales pensadas para acompañarte en tu
+            aprendizaje de lenguas y culturas indígenas amazónicas desde cualquier lugar.
+          </p>
+        </div>
+
+        <!-- WAITLIST BANNER -->
+        <section id="waitlist" class="mb-12">
+          <div class="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-white/80 to-shuar-sand/50 dark:from-primary/10 dark:via-background-dark dark:to-white/5 p-6 md:p-8">
+            <div class="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative grid md:grid-cols-2 gap-6 md:gap-8 items-center">
+              <!-- Left: Copy -->
+              <div class="space-y-3">
+                <div class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-md">
+                  <span class="material-symbols-outlined text-[13px]">notifications_active</span>
+                  <span data-i18n="waitlist_badge">Próximamente</span>
+                </div>
+                <h2 class="text-[#181111] dark:text-white text-xl md:text-2xl font-serif font-bold leading-tight" data-i18n="waitlist_title">
+                  ¿Quieres saber cuándo lanzamos Kichwa?
+                </h2>
+                <p class="text-earth-brown dark:text-gray-400 text-sm leading-relaxed" data-i18n="waitlist_subtitle">
+                  Únete a la lista de espera y sé de los primeros en acceder a las nuevas minilecciones.
+                </p>
+              </div>
+              <!-- Right: Form -->
+              <div>
+                <form id="waitlist-form" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-3">
+                  <input type="hidden" name="form-name" value="waitlist" />
+                  <p style="display:none">
+                    <label>Don't fill this: <input name="bot-field" /></label>
+                  </p>
+                  <div>
+                    <label for="waitlist-email" class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1" data-i18n="waitlist_email_label">Email</label>
+                    <input type="email" id="waitlist-email" name="email" required placeholder="tu@email.com"
+                      class="w-full rounded-lg border border-shuar-sand dark:border-white/10 bg-white dark:bg-white/5 text-text-main dark:text-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors" />
+                  </div>
+                  <div>
+                    <label for="waitlist-language" class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1" data-i18n="waitlist_language_label">¿Qué lengua te interesa?</label>
+                    <select id="waitlist-language" name="language"
+                      class="w-full rounded-lg border border-shuar-sand dark:border-white/10 bg-white dark:bg-white/5 text-text-main dark:text-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors">
+                      <option value="kichwa">Kichwa</option>
+                      <option value="shuar">Shuar</option>
+                      <option value="waorani">Waorani</option>
+                      <option value="other" data-i18n-option="waitlist_option_other">Otra</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label for="waitlist-referral" class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1" data-i18n="waitlist_referral_label">¿Cómo nos encontraste?</label>
+                    <select id="waitlist-referral" name="referral"
+                      class="w-full rounded-lg border border-shuar-sand dark:border-white/10 bg-white dark:bg-white/5 text-text-main dark:text-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors">
+                      <option value="social_media" data-i18n-option="waitlist_ref_social">Redes sociales</option>
+                      <option value="search" data-i18n-option="waitlist_ref_search">Buscador (Google, etc.)</option>
+                      <option value="friend" data-i18n-option="waitlist_ref_friend">Un amigo / conocido</option>
+                      <option value="university" data-i18n-option="waitlist_ref_university">Universidad / academia</option>
+                      <option value="other" data-i18n-option="waitlist_ref_other">Otro</option>
+                    </select>
+                  </div>
+                  <button type="submit" id="waitlist-submit"
+                    class="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium py-2.5 px-4 transition-colors">
+                    <span class="material-symbols-outlined text-base">mail</span>
+                    <span data-i18n="waitlist_cta">Unirme a la lista de espera</span>
+                  </button>
+                </form>
+                <!-- Success message (hidden by default) -->
+                <div id="waitlist-success" class="hidden text-center py-6 space-y-2">
+                  <span class="material-symbols-outlined text-primary text-4xl">check_circle</span>
+                  <p class="text-text-main dark:text-white font-serif font-semibold text-lg" data-i18n="waitlist_success_title">¡Estás en la lista!</p>
+                  <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="waitlist_success_msg">Te avisaremos cuando lancemos las lecciones de Kichwa.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- LANGUAGE CATALOG -->
+        <section class="mb-16">
+          <div class="mb-6">
+            <h2 class="text-[#181111] dark:text-white text-2xl md:text-3xl font-serif font-semibold mb-2"
+              data-i18n="catalog_title">Lenguas Indígenas</h2>
+            <p class="text-earth-brown dark:text-gray-400 text-base" data-i18n="catalog_subtitle">Explora el catálogo de
+              lenguas disponibles y próximas en Ipiak.</p>
+          </div>
+          <div id="language-catalog" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Rendered by shared.js -->
+          </div>
+        </section>
+
+        <!-- LESSONS -->
+        <section id="lecciones" class="mb-16">
+          <div class="mb-6">
+            <h2 class="text-[#181111] dark:text-white text-2xl md:text-3xl font-serif font-semibold">
+              <span data-i18n="lessons_title">Lecciones Disponibles</span>
+              <span class="text-primary text-lg md:text-xl ml-2">— <span
+                  data-i18n="lessons_subtitle_shuar">Shuar</span></span>
+            </h2>
+          </div>
+          <div id="lessons" class="grid grid-cols-1 md:grid-cols-2 gap-8"></div>
+          <p id="emptyState" class="text-earth-brown dark:text-gray-400 text-base text-center" style="display:none"
+            data-i18n="lesson_empty">
+            No hay lecciones disponibles por el momento.
+          </p>
+        </section>
+
+        <!-- SHARE -->
+        <section class="mt-8 md:mt-12">
+          <div class="bg-white/70 dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-2xl p-6 md:p-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div class="space-y-1">
+                <h3 class="text-text-main dark:text-white text-xl font-serif font-semibold" data-i18n="share_title">
+                  Comparte Ipiak</h3>
+                <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="share_subtitle">Comparte las
+                  minilecciones para que más personas lo conozcan.</p>
+              </div>
+              <div class="flex flex-wrap items-center gap-3">
+                <a href="#" data-share="twitter"
+                  class="inline-flex items-center gap-2 rounded-full border border-shuar-sand text-text-main dark:text-white hover:border-primary hover:text-primary text-sm font-medium px-4 py-2 transition-colors">
+                  <span class="material-symbols-outlined text-base">public</span> <span
+                    data-i18n="share_twitter">Twitter</span>
+                </a>
+                <a href="#" data-share="whatsapp"
+                  class="inline-flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#1eb257] text-white text-sm font-medium px-4 py-2 transition-colors">
+                  <span class="material-symbols-outlined text-base">chat</span> <span
+                    data-i18n="share_whatsapp">WhatsApp</span>
+                </a>
+                <a href="#" data-share="facebook"
+                  class="inline-flex items-center gap-2 rounded-full border border-shuar-sand text-text-main dark:text-white hover:border-primary hover:text-primary text-sm font-medium px-4 py-2 transition-colors">
+                  <span class="material-symbols-outlined text-base">share</span> <span
+                    data-i18n="share_facebook">Facebook</span>
+                </a>
+                <button type="button" data-share="copy_link"
+                  class="inline-flex items-center gap-2 rounded-full border border-shuar-sand text-text-main dark:text-white hover:border-primary hover:text-primary text-sm font-medium px-4 py-2 transition-colors"
+                  aria-label="Copiar enlace a portapapeles">
+                  <span class="material-symbols-outlined text-base">content_copy</span> <span
+                    data-i18n="share_copy">Copiar enlace</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="mt-8 md:mt-12">
+          <div class="space-y-4">
+            <h3 class="text-text-main dark:text-white text-2xl font-serif font-semibold" data-i18n="faq_title">FAQ</h3>
+            <div class="grid gap-3">
+              <details class="rounded-xl border border-shuar-sand dark:border-white/10 bg-white/70 dark:bg-white/5 p-4">
+                <summary class="cursor-pointer text-text-main dark:text-white font-medium" data-i18n="faq_q1">¿Cuánto
+                  tiempo toma cada lección?</summary>
+                <div class="mt-2 text-earth-brown dark:text-gray-400 text-sm" data-i18n="faq_a1">Entre 10 y 15 minutos
+                  en promedio.</div>
+              </details>
+              <details class="rounded-xl border border-shuar-sand dark:border-white/10 bg-white/70 dark:bg-white/5 p-4">
+                <summary class="cursor-pointer text-text-main dark:text-white font-medium" data-i18n="faq_q2">¿Necesito
+                  experiencia previa?</summary>
+                <div class="mt-2 text-earth-brown dark:text-gray-400 text-sm" data-i18n="faq_a2">No. Están pensadas para
+                  nivel básico y puedes comenzar desde cero.</div>
+              </details>
+              <details class="rounded-xl border border-shuar-sand dark:border-white/10 bg-white/70 dark:bg-white/5 p-4">
+                <summary class="cursor-pointer text-text-main dark:text-white font-medium" data-i18n="faq_q3">¿Habrá más
+                  lecciones?</summary>
+                <div class="mt-2 text-earth-brown dark:text-gray-400 text-sm" data-i18n="faq_a3">Sí. Seguiremos
+                  publicando nuevas minilecciones y ampliando a otras lenguas amazónicas.</div>
+              </details>
+              <details class="rounded-xl border border-shuar-sand dark:border-white/10 bg-white/70 dark:bg-white/5 p-4">
+                <summary class="cursor-pointer text-text-main dark:text-white font-medium" data-i18n="faq_q4">¿Es
+                  realmente gratis?</summary>
+                <div class="mt-2 text-earth-brown dark:text-gray-400 text-sm" data-i18n="faq_a4">Sí. El acceso a las
+                  minilecciones es gratuito.</div>
+              </details>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer
+      class="border-t border-shuar-sand dark:border-white/10 px-6 md:px-20 lg:px-40 py-10 bg-background-light dark:bg-background-dark">
+      <div class="max-w-[960px] mx-auto space-y-6">
+        <div class="grid md:grid-cols-2 gap-6 items-start">
+          <div class="flex flex-col items-center md:items-start gap-3 text-sm">
+            <div class="flex flex-wrap items-center gap-3">
+              <a href="#lecciones" class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
+                data-i18n="footer_lessons">Lecciones</a>
+              <a href="about.html" class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
+                data-i18n="footer_about">Acerca de</a>
+              <a href="mailto:nu@ipiak.com"
+                class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
+                data-i18n="footer_contact">Contacto: nu@ipiak.com</a>
+            </div>
+          </div>
+          <div class="flex flex-col items-center md:items-end gap-3">
+            <a href="https://chat.whatsapp.com/HT0oFeE58tJ98yWShrnSZw" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full bg-[#25D366] hover:bg-[#1eb257] text-white text-sm font-medium px-4 py-2 transition-colors">
+              <span class="material-symbols-outlined text-base">chat</span>
+              <span data-i18n="footer_whatsapp">Únete a nuestra comunidad de WhatsApp</span>
+            </a>
+            <a href="https://instagram.com/_ipiak" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full border border-shuar-sand text-text-main dark:text-white hover:border-primary hover:text-primary text-sm font-medium px-4 py-2 transition-colors">
+              <span class="material-symbols-outlined text-base">camera_alt</span>
+              <span data-i18n="footer_instagram">Síguenos: Instagram</span>
+            </a>
+          </div>
+        </div>
+        <div class="text-earth-brown dark:text-gray-500 text-xs text-center" data-i18n="footer_copy">
+          Ipiak · 2026
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- COMMUNITY MODAL -->
+  <div id="community-modal"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center px-4 hidden z-50">
+    <div
+      class="bg-background-light dark:bg-background-dark rounded-2xl shadow-xl max-w-sm w-full p-6 border border-shuar-sand dark:border-white/10">
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-text-main dark:text-white text-xl font-serif font-semibold mb-1" data-i18n="modal_title">
+            Únete a la comunidad
+          </h2>
+          <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="modal_subtitle">
+            Súmate al grupo y recibe novedades de nuevas minilecciones y recursos.
+          </p>
+        </div>
+        <button type="button" id="community-modal-close"
+          class="rounded-full w-8 h-8 flex items-center justify-center bg-white/80 dark:bg-white/10 text-text-main dark:text-white border border-shuar-sand/60"
+          aria-label="Cerrar">
+          <span class="material-symbols-outlined text-base">close</span>
+        </button>
+      </div>
+      <div class="space-y-3">
+        <a href="https://chat.whatsapp.com/HT0oFeE58tJ98yWShrnSZw" target="_blank" rel="noopener noreferrer"
+          class="w-full inline-flex items-center justify-center gap-2 rounded-full bg-[#25D366] hover:bg-[#1eb257] text-white text-sm font-medium py-2.5 px-4 transition-colors">
+          <span class="material-symbols-outlined text-base">chat</span>
+          <span data-i18n="modal_whatsapp">Únete al grupo de WhatsApp</span>
+        </a>
+        <a href="https://instagram.com/_ipiak" target="_blank" rel="noopener noreferrer"
+          class="w-full inline-flex items-center justify-center gap-2 rounded-full border border-shuar-sand text-text-main dark:text-white hover:border-primary hover:text-primary text-sm font-medium py-2.5 px-4 transition-colors">
+          <span class="material-symbols-outlined text-base">camera_alt</span>
+          <span data-i18n="modal_instagram">Síguenos en Instagram</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="lecciones.js"></script>
+  <script src="shared.js"></script>
+  <script>
+    function createLessonCard(lesson) {
+      var lang = (typeof getCurrentLang === "function") ? getCurrentLang() : "es";
+      var dict = (typeof I18N !== "undefined" && I18N[lang]) ? I18N[lang] : {};
+
+      var card = document.createElement("article");
+      card.className = "flex flex-col gap-4 p-6 bg-white dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group cursor-pointer h-full";
+      card.onclick = function () {
+        if (window.gtag) {
+          window.gtag("event", "open_lesson", {
+            lesson_id: lesson.folderName || lesson.id || lesson.title,
+            lesson_title: lesson.title,
+            event_callback: function () {
+              window.location.href = lesson.path;
+            }
+          });
+          setTimeout(function () { window.location.href = lesson.path; }, 500);
+        } else {
+          window.location.href = lesson.path;
+        }
+      };
+
+      var media = document.createElement("div");
+      media.className = "w-full aspect-video rounded-lg overflow-hidden relative bg-center bg-no-repeat bg-cover";
+
+      if (lesson.image) {
+        media.style.backgroundImage = "url('" + lesson.image + "')";
+      } else {
+        media.classList.add("bg-gradient-to-br", "from-primary/15", "via-earth-brown/10", "to-background-light");
+      }
+
+      var overlay = document.createElement("div");
+      overlay.className = "absolute inset-0 bg-primary/10 group-hover:bg-primary/0 transition-colors";
+      media.appendChild(overlay);
+
+      var badge = document.createElement("div");
+      badge.className = "absolute top-3 left-3 bg-white/95 dark:bg-black/80 px-3 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider text-primary shadow-sm border border-primary/10";
+      badge.textContent = dict.lesson_level || "Nivel : Básico";
+      media.appendChild(badge);
+
+      var timeBadge = document.createElement("div");
+      timeBadge.className = "absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm px-2 py-1 rounded text-white text-[10px] flex items-center gap-1 font-medium";
+      timeBadge.innerHTML = '<span class="material-symbols-outlined text-[12px]">schedule</span> ' + (dict.lesson_time || "10-15 min");
+      media.appendChild(timeBadge);
+
+      card.appendChild(media);
+
+      var body = document.createElement("div");
+      body.className = "flex flex-col gap-3 flex-1";
+
+      var title = document.createElement("h3");
+      title.className = "text-text-main dark:text-white text-xl font-serif font-bold leading-tight";
+      title.textContent = lesson.title;
+      body.appendChild(title);
+
+      var desc = document.createElement("p");
+      desc.className = "text-earth-brown dark:text-gray-400 text-sm font-normal leading-relaxed line-clamp-2";
+      desc.textContent = lesson.description || dict.lesson_fallback_desc || "Haz clic para abrir esta minilección interactiva.";
+      body.appendChild(desc);
+
+      var spacer = document.createElement("div");
+      spacer.className = "flex-1";
+      body.appendChild(spacer);
+
+      var btn = document.createElement("button");
+      btn.className = "w-full mt-2 bg-primary hover:bg-primary-dark text-white font-sans font-medium py-2.5 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 group-hover:shadow-md";
+      btn.innerHTML = (dict.lesson_start || "Empezar lección") + ' <span class="material-symbols-outlined text-sm">arrow_forward</span>';
+      btn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        if (window.gtag) {
+          window.gtag("event", "start_lesson", {
+            lesson_id: lesson.folderName || lesson.id || lesson.title,
+            lesson_title: lesson.title,
+            event_callback: function () {
+              window.location.href = lesson.path;
+            }
+          });
+          setTimeout(function () { window.location.href = lesson.path; }, 500);
+        } else {
+          window.location.href = lesson.path;
+        }
+      });
+      body.appendChild(btn);
+
+      card.appendChild(body);
+      return card;
+    }
+
+    window.renderLessons = function renderLessons() {
+      var grid = document.getElementById("lessons");
+      var empty = document.getElementById("emptyState");
+      var lessons = window.LESSONS_DATA || [];
+      var lang = (typeof getCurrentLang === "function") ? getCurrentLang() : "es";
+      var dict = (typeof I18N !== "undefined" && I18N[lang]) ? I18N[lang] : {};
+      grid.innerHTML = "";
+      if (!lessons || lessons.length === 0) {
+        empty.style.display = "block";
+        empty.textContent = dict.lesson_empty || "No hay lecciones disponibles por el momento.";
+        return;
+      }
+      empty.style.display = "none";
+      lessons.forEach(function (lesson) {
+        grid.appendChild(createLessonCard(lesson));
+      });
+    };
+
+    if (typeof window.LESSONS_DATA === "undefined") {
+      var empty = document.getElementById("emptyState");
+      var lang = (typeof getCurrentLang === "function") ? getCurrentLang() : "es";
+      var dict = (typeof I18N !== "undefined" && I18N[lang]) ? I18N[lang] : {};
+      empty.textContent = dict.lesson_no_data || "No se encontró el archivo de datos (lecciones.js). Ejecuta update_lessons.js.";
+      empty.style.display = "block";
+    } else {
+      window.renderLessons();
+    }
+  </script>
+</body>
+
+</html>
