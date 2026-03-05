@@ -1,0 +1,387 @@
+{
+    "name": "scraper_serp",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "daysInterval": 3
+                        }
+                    ]
+                }
+            },
+            "id": "a1000001-0001-4000-a000-000000000001",
+            "name": "Cada 3 días",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -1984,
+                208
+            ]
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "queries-list",
+                            "name": "queries",
+                            "value": "={{ [\n  { \"q\": \"kichwa language linguistics research site:academia.edu OR site:jstor.org OR site:scielo.org\", \"type\": \"academic\", \"lang\": \"kichwa\" },\n  { \"q\": \"shuar language linguistics Ecuador research paper\", \"type\": \"academic\", \"lang\": \"shuar\" },\n  { \"q\": \"lengua kichwa vocabulario frases recursos libres\", \"type\": \"vocabulary\", \"lang\": \"kichwa\" },\n  { \"q\": \"kichwa quechua open educational resources OER free\", \"type\": \"vocabulary\", \"lang\": \"kichwa\" },\n  { \"q\": \"pueblos amazónicos Ecuador noticias 2025\", \"type\": \"news\", \"lang\": \"general\" },\n  { \"q\": \"indigenous amazonian languages preservation Ecuador 2025\", \"type\": \"academic\", \"lang\": \"general\" },\n  { \"q\": \"shuar achuar language learning free resources\", \"type\": \"vocabulary\", \"lang\": \"shuar\" },\n  { \"q\": \"kichwa grammar dictionary PDF free download\", \"type\": \"academic\", \"lang\": \"kichwa\" }\n] }}",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "a1000001-0001-4000-a000-000000000002",
+            "name": "Definir Búsquedas",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -1760,
+                208
+            ]
+        },
+        {
+            "parameters": {
+                "fieldToSplitOut": "queries",
+                "options": {}
+            },
+            "id": "a1000001-0001-4000-a000-000000000003",
+            "name": "Loop por Query",
+            "type": "n8n-nodes-base.splitOut",
+            "typeVersion": 1,
+            "position": [
+                -1536,
+                208
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://serpapi.com/search.json",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "api_key",
+                            "value": "TU_SERPAPI_KEY"
+                        },
+                        {
+                            "name": "engine",
+                            "value": "google"
+                        },
+                        {
+                            "name": "q",
+                            "value": "={{ $json.q }}"
+                        },
+                        {
+                            "name": "num",
+                            "value": "5"
+                        },
+                        {
+                            "name": "hl",
+                            "value": "es"
+                        }
+                    ]
+                },
+                "options": {
+                    "timeout": 15000
+                }
+            },
+            "id": "a1000001-0001-4000-a000-000000000004",
+            "name": "SerpApi Search",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -1328,
+                208
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const items = $input.all();\nconst results = [];\nconst skipDomains = ['pinterest', 'facebook.com', 'twitter.com', 'instagram.com', 'tiktok.com', 'reddit.com'];\n\nfor (const item of items) {\n  // SerpApi devuelve organic_results en vez de items\n  const searchResults = item.json.organic_results || [];\n  const queryQ = item.json.search_parameters?.q || '';\n  \n  let sourceType = 'academic';\n  if (queryQ.includes('vocabulario') || queryQ.includes('vocabulary') || queryQ.includes('frases') || queryQ.includes('learning')) sourceType = 'vocabulary';\n  if (queryQ.includes('noticias') || queryQ.includes('news')) sourceType = 'news';\n\n  for (const r of searchResults) {\n    const url = r.link || '';\n    if (skipDomains.some(d => url.includes(d))) continue;\n    results.push({\n      json: {\n        title: r.title || '',\n        url,\n        snippet: r.snippet || '',\n        source_type: sourceType,\n        display_link: r.displayed_link || ''\n      }\n    });\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { _empty: true } }];"
+            },
+            "id": "a1000001-0001-4000-a000-000000000005",
+            "name": "Extraer Resultados",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -1104,
+                208
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "conditions": [
+                        {
+                            "id": "not-empty",
+                            "leftValue": "={{ $json._empty }}",
+                            "rightValue": true,
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "notEquals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "a1000001-0001-4000-a000-000000000006",
+            "name": "Filtrar Vacíos",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                -880,
+                208
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "value": "AIzaSyCbSgY1AcwyAAL4oQD0smWopmlWG-j4_Zc"
+                        }
+                    ]
+                },
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ JSON.stringify({ contents: [{ parts: [{ text: 'Analiza este recurso web para determinar su relevancia para el aprendizaje de lenguas indígenas amazónicas (kichwa, shuar, achuar, etc.):\\n\\nTítulo: ' + $json.title + '\\nURL: ' + $json.url + '\\nFragmento: ' + $json.snippet + '\\nTipo de fuente: ' + $json.source_type + '\\n\\nResponde SOLO en formato JSON (sin markdown, sin ```json) con esta estructura exacta:\\n{\"relevant\": true/false, \"relevance_score\": 1-10, \"content_type\": \"academic\"|\"vocabulary\"|\"news\"|\"multimedia\"|\"other\", \"language\": \"kichwa\"|\"shuar\"|\"general\"|\"otro\", \"summary\": \"resumen breve en español\", \"tags\": [\"etiqueta1\", \"etiqueta2\"]}' }] }] }) }}",
+                "options": {
+                    "timeout": 15000
+                }
+            },
+            "id": "a1000001-0001-4000-a000-000000000007",
+            "name": "Gemini – Analizar",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -656,
+                112
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  try {\n    const raw = item.json.candidates?.[0]?.content?.parts?.[0]?.text || '{}';\n    const clean = raw.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n    const analysis = JSON.parse(clean);\n\n    if (analysis.relevant === true && (analysis.relevance_score || 0) >= 7) {\n      results.push({\n        json: {\n          title: item.json.title || '',\n          url: item.json.url || '',\n          source_type: analysis.content_type || item.json.source_type || 'other',\n          language: analysis.language || 'general',\n          summary: analysis.summary || '',\n          relevance_score: analysis.relevance_score || 7,\n          tags: analysis.tags || [],\n          display_link: item.json.display_link || ''\n        }\n      });\n    }\n  } catch (e) {\n    // JSON malformado de Gemini, ignorar\n  }\n}\n\nreturn results.length > 0 ? results : [{ json: { _skip: true } }];"
+            },
+            "id": "a1000001-0001-4000-a000-000000000008",
+            "name": "Parsear Gemini",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -448,
+                112
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "conditions": [
+                        {
+                            "id": "skip-check",
+                            "leftValue": "={{ $json._skip }}",
+                            "rightValue": true,
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "notEquals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "a1000001-0001-4000-a000-000000000009",
+            "name": "Filtrar por Relevancia",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                -224,
+                112
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/resources",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "resolution=ignore-duplicates,return=minimal"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ JSON.stringify({ title: $json.title, url: $json.url, source_type: $json.source_type, language: $json.language, summary: $json.summary, relevance_score: $json.relevance_score, tags: $json.tags, display_link: $json.display_link }) }}",
+                "options": {}
+            },
+            "id": "a1000001-0001-4000-a000-000000000010",
+            "name": "Guardar en Supabase",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const items = $input.all();\nreturn [{ json: { status: 'completado', guardados: items.length, timestamp: new Date().toISOString() } }];"
+            },
+            "id": "a1000001-0001-4000-a000-000000000011",
+            "name": "Log Final",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                224,
+                0
+            ]
+        }
+    ],
+    "connections": {
+        "Cada 3 días": {
+            "main": [
+                [
+                    {
+                        "node": "Definir Búsquedas",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Definir Búsquedas": {
+            "main": [
+                [
+                    {
+                        "node": "Loop por Query",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop por Query": {
+            "main": [
+                [
+                    {
+                        "node": "SerpApi Search",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "SerpApi Search": {
+            "main": [
+                [
+                    {
+                        "node": "Extraer Resultados",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extraer Resultados": {
+            "main": [
+                [
+                    {
+                        "node": "Filtrar Vacíos",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filtrar Vacíos": {
+            "main": [
+                [
+                    {
+                        "node": "Gemini – Analizar",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gemini – Analizar": {
+            "main": [
+                [
+                    {
+                        "node": "Parsear Gemini",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parsear Gemini": {
+            "main": [
+                [
+                    {
+                        "node": "Filtrar por Relevancia",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filtrar por Relevancia": {
+            "main": [
+                [
+                    {
+                        "node": "Guardar en Supabase",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Guardar en Supabase": {
+            "main": [
+                [
+                    {
+                        "node": "Log Final",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}

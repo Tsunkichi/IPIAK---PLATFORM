@@ -82,6 +82,25 @@ var I18N = {
     lesson_no_data: "No se encontró el archivo de datos (lecciones.js). Ejecuta update_lessons.js.",
     lesson_fallback_desc: "Haz clic para abrir esta minilección interactiva.",
 
+    /* Exercises section */
+    nav_exercises: "Ejercicios",
+    exercises_title: "Ejercicios Interactivos",
+    exercises_subtitle: "Practica kichwa y shuar con ejercicios generados a partir de material lingüístico auténtico.",
+    ex_filter_all: "Todos",
+    ex_filter_flashcard: "Flashcards",
+    ex_filter_exercise: "Ejercicios",
+    ex_filter_culture: "Cultura",
+    ex_filter_basic: "Básico",
+    ex_filter_inter: "Intermedio",
+    ex_filter_adv: "Avanzado",
+    ex_btn_flip: "Ver respuesta",
+    ex_btn_check: "Comprobar",
+    ex_btn_random: "Ejercicio aleatorio",
+    ex_btn_load_more: "Cargar más",
+    ex_correct: "¡Correcto!",
+    ex_incorrect: "Incorrecto",
+    ex_empty: "No hay ejercicios disponibles aún.",
+
     /* Share */
     share_title: "Comparte Ipiak",
     share_subtitle: "Comparte las minilecciones para que más personas lo conozcan.",
@@ -192,6 +211,23 @@ var I18N = {
     lesson_empty: "No lessons available at this time.",
     lesson_no_data: "Data file not found (lecciones.js). Run update_lessons.js.",
     lesson_fallback_desc: "Click to open this interactive mini-lesson.",
+    nav_exercises: "Exercises",
+    exercises_title: "Interactive Exercises",
+    exercises_subtitle: "Practice Kichwa and Shuar with exercises generated from authentic linguistic material.",
+    ex_filter_all: "All",
+    ex_filter_flashcard: "Flashcards",
+    ex_filter_exercise: "Exercises",
+    ex_filter_culture: "Culture",
+    ex_filter_basic: "Basic",
+    ex_filter_inter: "Intermediate",
+    ex_filter_adv: "Advanced",
+    ex_btn_flip: "View answer",
+    ex_btn_check: "Check",
+    ex_btn_random: "Random exercise",
+    ex_btn_load_more: "Load more",
+    ex_correct: "Correct!",
+    ex_incorrect: "Incorrect",
+    ex_empty: "No exercises available yet.",
     share_title: "Share Ipiak",
     share_subtitle: "Share the mini-lessons so more people can discover them.",
     share_twitter: "Twitter",
@@ -501,7 +537,7 @@ function initShareButtons() {
             btn.innerHTML = originalText;
             btn.classList.remove("border-primary", "text-primary");
           }, 2000);
-        }).catch(function () {});
+        }).catch(function () { });
         return;
       }
       var href = buildShare(net);

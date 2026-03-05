@@ -1,0 +1,509 @@
+{
+    "name": "IPIAK - Generador de Ejercicios (Gamificación)",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 2
+                        }
+                    ]
+                }
+            },
+            "id": "e0e8fa6d-09aa-4c74-a6a3-2c1cf645eb4c",
+            "name": "Schedule Trigger",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "search",
+                "query": "parents in 'ID_DE_LA_CARPETA_IPIAK_FUENTES' and trashed=false",
+                "options": {
+                    "fields": [
+                        "id",
+                        "name",
+                        "mimeType"
+                    ]
+                }
+            },
+            "id": "279b3ee4-af16-4af5-aaad-88cced69ae2c",
+            "name": "List Drive Files",
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 2,
+            "position": [
+                220,
+                0
+            ],
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "TU_ID_DE_CREDENCIAL_AQUI",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        }
+                    ]
+                },
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "select",
+                            "value": "drive_file_id"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "7585b1c5-9f5b-4ecf-a42e-15d9475f41dc",
+            "name": "Get Processed Docs",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                440,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const driveFiles = $('List Drive Files').all();\nconst processedDocs = $input.all();\n\n// Extraer los IDs ya procesados\nconst processedIds = processedDocs.map(item => item.json.drive_file_id);\n\n// Filtrar archivos de Drive que no esten en Supabase\nconst newFiles = driveFiles.filter(item => !processedIds.includes(item.json.id));\n\nreturn newFiles;"
+            },
+            "id": "67fcd595-aba5-48b0-81f1-3d711f7c3574",
+            "name": "Filter New Files",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                660,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "batchSize": 1,
+                "options": {}
+            },
+            "id": "31b9ef08-6202-4fc4-ac03-88390b1ec1f8",
+            "name": "Loop Files",
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 1,
+            "position": [
+                860,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "return=representation"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "filename",
+                            "value": "={{ $json.name }}"
+                        },
+                        {
+                            "name": "drive_file_id",
+                            "value": "={{ $json.id }}"
+                        },
+                        {
+                            "name": "status",
+                            "value": "processing"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "e4450a86-7a70-4fc7-9b2f-870ba3b94bbf",
+            "name": "Insert Processing Doc",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1080,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "download",
+                "fileId": "={{ $('Loop Files').json.id }}",
+                "options": {}
+            },
+            "id": "0d62a3fa-2395-4d7a-afc3-5c2194680c65",
+            "name": "Download PDF",
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 2,
+            "position": [
+                1300,
+                0
+            ],
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "TU_ID_DE_CREDENCIAL_AQUI",
+                    "name": "Google Drive account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "key",
+                            "value": "REEMPLAZAR_POR_TU_GEMINI_API_KEY"
+                        }
+                    ]
+                },
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"contents\": [\n    {\n      \"parts\": [\n        {\n          \"text\": \"Eres un lingüista y pedagogo especializado en lenguas indígenas amazónicas de Ecuador.\\n\\nAnaliza el siguiente documento y extrae TODO el contenido lingüísticamente valioso. Para cada fragmento útil, decide autónomamente qué tipo de ejercicio educativo tiene más sentido crear según el contenido:\\n\\n- Pares de vocabulario (palabra + traducción) → crea \\\"flashcard\\\"\\n- Frases con estructura clara → crea \\\"fill_blank\\\" \\n- Oraciones completas con gramática visible → crea \\\"word_order\\\"\\n- Conceptos con múltiples posibles respuestas → crea \\\"multiple_choice\\\"\\n- Elementos culturales o contextuales → crea \\\"cultural_card\\\"\\n\\nReglas:\\n1. Sé generoso: un documento puede y debe producir 20-50 ejercicios\\n2. Identifica el idioma de cada ejercicio: \\\"kichwa\\\", \\\"shuar\\\", o \\\"general\\\"\\n3. Asigna dificultad: \\\"basic\\\", \\\"intermediate\\\", o \\\"advanced\\\"\\n4. El campo \\\"content\\\" debe seguir exactamente el schema del tipo elegido\\n5. Responde ÚNICAMENTE con un array JSON válido, sin markdown.\\n\\nSchema de cada ejercicio:\\n{\\n  \\\"type\\\": \\\"flashcard|fill_blank|word_order|multiple_choice|cultural_card\\\",\\n  \\\"language\\\": \\\"kichwa|shuar|general\\\",\\n  \\\"difficulty\\\": \\\"basic|intermediate|advanced\\\",\\n  \\\"title\\\": \\\"título corto descriptivo\\\",\\n  \\\"content\\\": { ...según tipo... }\\n}\"\n        },\n        {\n          \"inlineData\": {\n            \"mimeType\": \"application/pdf\",\n            \"data\": \"{{ $binary.data.data }}\"\n          }\n        }\n      ]\n    }\n  ],\n  \"generationConfig\": {\n    \"responseMimeType\": \"application/json\"\n  }\n}",
+                "options": {}
+            },
+            "id": "e6a64ac3-4a11-4770-bd6f-f222d4f29df5",
+            "name": "Gemini Multimodal",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1520,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "try {\n  const geminiResponseText = $json.candidates[0].content.parts[0].text;\n  \n  // Limpiar markdown fences si existen\n  let cleanJson = geminiResponseText.trim();\n  if (cleanJson.startsWith('```json')) {\n    cleanJson = cleanJson.substring(7);\n  }\n  if (cleanJson.startsWith('```')) {\n    cleanJson = cleanJson.substring(3);\n  }\n  if (cleanJson.endsWith('```')) {\n    cleanJson = cleanJson.substring(0, cleanJson.length - 3);\n  }\n  \n  const exercises = JSON.parse(cleanJson);\n  const docId = $('Insert Processing Doc').json.id;\n  \n  // Formatear payload de Supabase\n  const supabasePayload = exercises.map(ex => ({\n    type: ex.type,\n    language: ex.language,\n    difficulty: ex.difficulty,\n    title: ex.title,\n    content: ex.content,\n    source_document: docId,\n    active: true\n  }));\n  \n  return { json: { supabasePayload, total: supabasePayload.length, docId } };\n} catch (e) {\n  throw new Error(\"Fallo al parsear el JSON de Gemini: \" + e.message);\n}"
+            },
+            "id": "cbdd04cf-f30a-4da2-bee6-670dcb768461",
+            "name": "Parse Exercises",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1740,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/exercises",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "resolution=ignore-duplicates"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ $json.supabasePayload }}",
+                "options": {}
+            },
+            "id": "848ecead-2f88-4e89-9a25-be9fc39bb258",
+            "name": "Insert Exercises",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1960,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "='https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents?id=eq.' + $('Parse Exercises').item.json.docId",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "status",
+                            "value": "processed"
+                        },
+                        {
+                            "name": "exercises_generated",
+                            "value": "={{ $('Parse Exercises').item.json.total }}"
+                        },
+                        {
+                            "name": "processed_at",
+                            "value": "={{ new Date().toISOString() }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "8dc71169-dcde-4402-9a3d-a5113d52cb3e",
+            "name": "Update Doc Success",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                2180,
+                0
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "eeb0c1b4-219d-4e94-a169-c0aebe8de233",
+            "name": "Error Trigger",
+            "type": "n8n-nodes-base.errorTrigger",
+            "typeVersion": 1,
+            "position": [
+                1060,
+                -200
+            ]
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "='https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents?id=eq.' + $('Insert Processing Doc').item.json[0].id",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer REEMPLAZAR_POR_SUPABASE_SERVICE_ROLE_KEY"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "status",
+                            "value": "error"
+                        },
+                        {
+                            "name": "error_message",
+                            "value": "={{ $json.execution.error.message }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "0df62d08-a379-42b7-a367-ab1b9ae69fd8",
+            "name": "Update Doc Error",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1280,
+                -200
+            ]
+        }
+    ],
+    "connections": {
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "List Drive Files",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "List Drive Files": {
+            "main": [
+                [
+                    {
+                        "node": "Get Processed Docs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Processed Docs": {
+            "main": [
+                [
+                    {
+                        "node": "Filter New Files",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Filter New Files": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Files",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop Files": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Insert Processing Doc",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Insert Processing Doc": {
+            "main": [
+                [
+                    {
+                        "node": "Download PDF",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download PDF": {
+            "main": [
+                [
+                    {
+                        "node": "Gemini Multimodal",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gemini Multimodal": {
+            "main": [
+                [
+                    {
+                        "node": "Parse Exercises",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse Exercises": {
+            "main": [
+                [
+                    {
+                        "node": "Insert Exercises",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Insert Exercises": {
+            "main": [
+                [
+                    {
+                        "node": "Update Doc Success",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update Doc Success": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Files",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Error Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Update Doc Error",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "saveDataErrorExecution": "all",
+        "saveDataSuccessExecution": "all",
+        "saveManualRuns": true,
+        "callerPolicy": "workflowsFromSameOwner",
+        "errorWorkflow": ""
+    }
+}

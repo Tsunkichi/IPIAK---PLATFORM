@@ -1,0 +1,52 @@
+﻿{
+    "updatedAt":  "2026-02-22T20:08:37.299Z",
+    "createdAt":  "2026-02-22T20:08:25.730Z",
+    "id":  "Roc6bfMuDMgaGXOW",
+    "name":  "My workflow",
+    "description":  null,
+    "active":  false,
+    "isArchived":  false,
+    "nodes":  [
+
+              ],
+    "connections":  {
+
+                    },
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "binaryMode":  "separate",
+                     "availableInMCP":  false
+                 },
+    "staticData":  null,
+    "meta":  null,
+    "pinData":  {
+
+                },
+    "versionId":  "c986e58a-447a-42b9-a63f-819c26c940eb",
+    "activeVersionId":  null,
+    "versionCounter":  2,
+    "triggerCount":  0,
+    "shared":  [
+                   {
+                       "updatedAt":  "2026-02-22T20:08:25.741Z",
+                       "createdAt":  "2026-02-22T20:08:25.741Z",
+                       "role":  "workflow:owner",
+                       "workflowId":  "Roc6bfMuDMgaGXOW",
+                       "projectId":  "dsXLMFkb8t0vxt73",
+                       "project":  {
+                                       "updatedAt":  "2026-03-04T04:23:22.479Z",
+                                       "createdAt":  "2026-02-22T18:25:25.345Z",
+                                       "id":  "dsXLMFkb8t0vxt73",
+                                       "name":  "Tsunki Shacay \u003cheytsunki@gmail.com\u003e",
+                                       "type":  "personal",
+                                       "icon":  null,
+                                       "description":  null,
+                                       "creatorId":  "f507fc1a-15ad-417b-9bf4-ec53ac503014"
+                                   }
+                   }
+               ],
+    "tags":  [
+
+             ],
+    "activeVersion":  null
+}

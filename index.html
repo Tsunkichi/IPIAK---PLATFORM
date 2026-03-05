@@ -96,6 +96,8 @@
           <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors"
             href="#lecciones" data-i18n="nav_lessons">Lecciones</a>
           <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors"
+            href="#ejercicios" data-i18n="nav_exercises">Ejercicios</a>
+          <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors"
             href="about.html" data-i18n="nav_about">Acerca de</a>
         </nav>
         <button type="button"
@@ -118,6 +120,8 @@
       <nav class="flex flex-col gap-3 text-sm pt-2">
         <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors" href="#lecciones"
           data-i18n="nav_lessons">Lecciones</a>
+        <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors" href="#ejercicios"
+          data-i18n="nav_exercises">Ejercicios</a>
         <a class="text-text-main dark:text-gray-300 font-medium hover:text-primary transition-colors" href="about.html"
           data-i18n="nav_about">Acerca de</a>
         <button type="button"
@@ -149,16 +153,21 @@
 
         <!-- WAITLIST BANNER -->
         <section id="waitlist" class="mb-12">
-          <div class="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-white/80 to-shuar-sand/50 dark:from-primary/10 dark:via-background-dark dark:to-white/5 p-6 md:p-8">
-            <div class="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+          <div
+            class="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/5 via-white/80 to-shuar-sand/50 dark:from-primary/10 dark:via-background-dark dark:to-white/5 p-6 md:p-8">
+            <div
+              class="absolute top-0 right-0 w-32 h-32 md:w-48 md:h-48 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2">
+            </div>
             <div class="relative grid md:grid-cols-2 gap-6 md:gap-8 items-center">
               <!-- Left: Copy -->
               <div class="space-y-3">
-                <div class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-md">
+                <div
+                  class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-md">
                   <span class="material-symbols-outlined text-[13px]">notifications_active</span>
                   <span data-i18n="waitlist_badge">Próximamente</span>
                 </div>
-                <h2 class="text-[#181111] dark:text-white text-xl md:text-2xl font-serif font-bold leading-tight" data-i18n="waitlist_title">
+                <h2 class="text-[#181111] dark:text-white text-xl md:text-2xl font-serif font-bold leading-tight"
+                  data-i18n="waitlist_title">
                   ¿Quieres saber cuándo lanzamos Kichwa?
                 </h2>
                 <p class="text-earth-brown dark:text-gray-400 text-sm leading-relaxed" data-i18n="waitlist_subtitle">
@@ -167,18 +176,22 @@
               </div>
               <!-- Right: Form -->
               <div>
-                <form id="waitlist-form" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" class="space-y-3">
+                <form id="waitlist-form" name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field"
+                  class="space-y-3">
                   <input type="hidden" name="form-name" value="waitlist" />
                   <p style="display:none">
                     <label>Don't fill this: <input name="bot-field" /></label>
                   </p>
                   <div>
-                    <label for="waitlist-email" class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1" data-i18n="waitlist_email_label">Email</label>
+                    <label for="waitlist-email" class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1"
+                      data-i18n="waitlist_email_label">Email</label>
                     <input type="email" id="waitlist-email" name="email" required placeholder="tu@email.com"
                       class="w-full rounded-lg border border-shuar-sand dark:border-white/10 bg-white dark:bg-white/5 text-text-main dark:text-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors" />
                   </div>
                   <div>
-                    <label for="waitlist-language" class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1" data-i18n="waitlist_language_label">¿Qué lengua te interesa?</label>
+                    <label for="waitlist-language"
+                      class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1"
+                      data-i18n="waitlist_language_label">¿Qué lengua te interesa?</label>
                     <select id="waitlist-language" name="language"
                       class="w-full rounded-lg border border-shuar-sand dark:border-white/10 bg-white dark:bg-white/5 text-text-main dark:text-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors">
                       <option value="kichwa">Kichwa</option>
@@ -188,13 +201,16 @@
                     </select>
                   </div>
                   <div>
-                    <label for="waitlist-referral" class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1" data-i18n="waitlist_referral_label">¿Cómo nos encontraste?</label>
+                    <label for="waitlist-referral"
+                      class="block text-text-main dark:text-gray-300 text-sm font-medium mb-1"
+                      data-i18n="waitlist_referral_label">¿Cómo nos encontraste?</label>
                     <select id="waitlist-referral" name="referral"
                       class="w-full rounded-lg border border-shuar-sand dark:border-white/10 bg-white dark:bg-white/5 text-text-main dark:text-white px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors">
                       <option value="social_media" data-i18n-option="waitlist_ref_social">Redes sociales</option>
                       <option value="search" data-i18n-option="waitlist_ref_search">Buscador (Google, etc.)</option>
                       <option value="friend" data-i18n-option="waitlist_ref_friend">Un amigo / conocido</option>
-                      <option value="university" data-i18n-option="waitlist_ref_university">Universidad / academia</option>
+                      <option value="university" data-i18n-option="waitlist_ref_university">Universidad / academia
+                      </option>
                       <option value="other" data-i18n-option="waitlist_ref_other">Otro</option>
                     </select>
                   </div>
@@ -207,8 +223,10 @@
                 <!-- Success message (hidden by default) -->
                 <div id="waitlist-success" class="hidden text-center py-6 space-y-2">
                   <span class="material-symbols-outlined text-primary text-4xl">check_circle</span>
-                  <p class="text-text-main dark:text-white font-serif font-semibold text-lg" data-i18n="waitlist_success_title">¡Estás en la lista!</p>
-                  <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="waitlist_success_msg">Te avisaremos cuando lancemos las lecciones de Kichwa.</p>
+                  <p class="text-text-main dark:text-white font-serif font-semibold text-lg"
+                    data-i18n="waitlist_success_title">¡Estás en la lista!</p>
+                  <p class="text-earth-brown dark:text-gray-400 text-sm" data-i18n="waitlist_success_msg">Te avisaremos
+                    cuando lancemos las lecciones de Kichwa.</p>
                 </div>
               </div>
             </div>
@@ -242,6 +260,76 @@
             data-i18n="lesson_empty">
             No hay lecciones disponibles por el momento.
           </p>
+        </section>
+
+        <!-- EXERCISES -->
+        <section id="ejercicios" class="mb-16">
+          <div class="mb-6">
+            <h2 class="text-[#181111] dark:text-white text-2xl md:text-3xl font-serif font-semibold mb-2"
+              data-i18n="exercises_title">
+              Ejercicios Interactivos
+            </h2>
+            <p class="text-earth-brown dark:text-gray-400 text-base" data-i18n="exercises_subtitle">
+              Practica kichwa y shuar con ejercicios generados a partir de material lingüístico auténtico.
+            </p>
+          </div>
+
+          <!-- Filters -->
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="exercise-lang-filter"
+                class="rounded-lg border border-shuar-sand dark:border-white/10 bg-white/70 dark:bg-white/5 text-text-main dark:text-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer">
+                <option value="all" data-i18n-option="ex_filter_all">Todos</option>
+                <option value="kichwa">Kichwa</option>
+                <option value="shuar">Shuar</option>
+              </select>
+              <select id="exercise-type-filter"
+                class="rounded-lg border border-shuar-sand dark:border-white/10 bg-white/70 dark:bg-white/5 text-text-main dark:text-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer">
+                <option value="all" data-i18n-option="ex_filter_all">Todos</option>
+                <option value="flashcard" data-i18n-option="ex_filter_flashcard">Flashcards</option>
+                <option value="fill_blank" data-i18n-option="ex_filter_exercise">Ejercicios</option>
+                <option value="word_order" data-i18n-option="ex_filter_exercise">Orden</option>
+                <option value="multiple_choice" data-i18n-option="ex_filter_exercise">Tests</option>
+                <option value="cultural_card" data-i18n-option="ex_filter_culture">Cultura</option>
+              </select>
+              <select id="exercise-diff-filter"
+                class="rounded-lg border border-shuar-sand dark:border-white/10 bg-white/70 dark:bg-white/5 text-text-main dark:text-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer">
+                <option value="all" data-i18n-option="ex_filter_all">Todos</option>
+                <option value="basic" data-i18n-option="ex_filter_basic">Básico</option>
+                <option value="intermediate" data-i18n-option="ex_filter_inter">Intermedio</option>
+                <option value="advanced" data-i18n-option="ex_filter_adv">Avanzado</option>
+              </select>
+            </div>
+            <button id="exercise-random-btn"
+              class="inline-flex items-center gap-2 rounded-full bg-primary/10 hover:bg-primary/20 text-primary text-sm font-medium px-4 py-2 transition-colors">
+              <span class="material-symbols-outlined text-base">shuffle</span>
+              <span data-i18n="ex_btn_random">Ejercicio aleatorio</span>
+            </button>
+          </div>
+
+          <!-- Grid -->
+          <div id="exercises-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Loading state -->
+            <div id="exercises-loading" class="col-span-full text-center py-12">
+              <div class="inline-block w-8 h-8 rounded-full border-2 border-shuar-sand border-t-primary animate-spin">
+              </div>
+            </div>
+          </div>
+
+          <div id="exercises-empty"
+            class="hidden text-center py-12 bg-white/50 dark:bg-white/5 rounded-2xl border border-dashed border-shuar-sand dark:border-white/10">
+            <span class="material-symbols-outlined text-earth-brown text-4xl mb-2">inventory_2</span>
+            <p class="text-text-main dark:text-gray-300" data-i18n="ex_empty">No hay ejercicios disponibles aún.</p>
+          </div>
+
+          <!-- Pagination -->
+          <div class="mt-8 flex justify-center">
+            <button id="exercises-load-more"
+              class="hidden inline-flex items-center gap-2 rounded-full border border-shuar-sand hover:border-primary hover:text-primary dark:border-white/10 dark:text-gray-300 dark:hover:border-primary text-text-main text-sm font-medium px-6 py-2.5 transition-all">
+              <span class="material-symbols-outlined text-base">expand_more</span>
+              <span data-i18n="ex_btn_load_more">Cargar más</span>
+            </button>
+          </div>
         </section>
 
         <!-- SHARE -->
@@ -326,6 +414,8 @@
             <div class="flex flex-wrap items-center gap-3">
               <a href="#lecciones" class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
                 data-i18n="footer_lessons">Lecciones</a>
+              <a href="#ejercicios" class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
+                data-i18n="nav_exercises">Ejercicios</a>
               <a href="about.html" class="text-text-main dark:text-gray-300 hover:text-primary transition-colors"
                 data-i18n="footer_about">Acerca de</a>
               <a href="mailto:nu@ipiak.com"
@@ -506,6 +596,395 @@
     } else {
       window.renderLessons();
     }
+
+    /* ───────────────── EXERCISES LOGIC ───────────────── */
+    const SUPABASE_URL = 'https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/exercises';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTY3NzAsImV4cCI6MjA4ODE3Mjc3MH0.RufdQk3H77nDZjykmYUvU1FHEcmdhJmRzvZgV03Flec';
+
+    let allExercises = [];
+    let currentFilteredExercises = [];
+    let exercisesOffset = 0;
+    const EXERCISES_PER_PAGE = 9;
+
+    async function fetchExercises() {
+      const container = document.getElementById("exercises-container");
+      const loading = document.getElementById("exercises-loading");
+      const empty = document.getElementById("exercises-empty");
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}?select=*&active=eq.true&order=created_at.desc`, {
+          headers: {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+          }
+        });
+
+        if (!response.ok) throw new Error("Error fetching exercises");
+
+        allExercises = await response.json();
+
+        if (loading) loading.style.display = "none";
+
+        if (allExercises.length === 0) {
+          if (empty) empty.classList.remove("hidden");
+          return;
+        }
+
+        applyFilters();
+      } catch (err) {
+        console.error(err);
+        if (loading) loading.style.display = "none";
+        if (empty) empty.classList.remove("hidden");
+      }
+    }
+
+    function applyFilters() {
+      const langFilter = document.getElementById("exercise-lang-filter")?.value || "all";
+      const typeFilter = document.getElementById("exercise-type-filter")?.value || "all";
+      const diffFilter = document.getElementById("exercise-diff-filter")?.value || "all";
+
+      currentFilteredExercises = allExercises.filter(ex => {
+        const matchLang = langFilter === "all" || ex.language === langFilter;
+        const matchType = typeFilter === "all" || ex.type === typeFilter;
+        const matchDiff = diffFilter === "all" || ex.difficulty === diffFilter;
+        return matchLang && matchType && matchDiff;
+      });
+
+      exercisesOffset = 0;
+      const container = document.getElementById("exercises-container");
+      if (container) container.innerHTML = "";
+
+      const empty = document.getElementById("exercises-empty");
+      const loadMoreBtn = document.getElementById("exercises-load-more");
+
+      if (currentFilteredExercises.length === 0) {
+        if (empty) empty.classList.remove("hidden");
+        if (loadMoreBtn) loadMoreBtn.classList.add("hidden");
+      } else {
+        if (empty) empty.classList.add("hidden");
+        renderNextBatch();
+      }
+    }
+
+    function renderNextBatch() {
+      const container = document.getElementById("exercises-container");
+      if (!container) return;
+
+      const batch = currentFilteredExercises.slice(exercisesOffset, exercisesOffset + EXERCISES_PER_PAGE);
+
+      batch.forEach(ex => {
+        container.appendChild(createExerciseCard(ex));
+      });
+
+      exercisesOffset += EXERCISES_PER_PAGE;
+      const loadMoreBtn = document.getElementById("exercises-load-more");
+
+      if (loadMoreBtn) {
+        if (exercisesOffset >= currentFilteredExercises.length) {
+          loadMoreBtn.classList.add("hidden");
+        } else {
+          loadMoreBtn.classList.remove("hidden");
+        }
+      }
+    }
+
+    function getRandomExercise() {
+      if (currentFilteredExercises.length === 0) return;
+      const rndIdx = Math.floor(Math.random() * currentFilteredExercises.length);
+      const randomEx = currentFilteredExercises[rndIdx];
+      const container = document.getElementById("exercises-container");
+      if (container) {
+        container.innerHTML = "";
+        container.appendChild(createExerciseCard(randomEx));
+      }
+      const loadMoreBtn = document.getElementById("exercises-load-more");
+      if (loadMoreBtn) loadMoreBtn.classList.add("hidden");
+    }
+
+    function createExerciseCard(ex) {
+      const lang = (typeof getCurrentLang === "function") ? getCurrentLang() : "es";
+      const dict = (typeof I18N !== "undefined" && I18N[lang]) ? I18N[lang] : {};
+
+      const card = document.createElement("article");
+      card.className = "flex flex-col bg-white dark:bg-white/5 border border-shuar-sand dark:border-white/10 rounded-xl shadow-sm relative overflow-visible h-[300px]";
+
+      // Common header
+      const header = document.createElement("div");
+      header.className = "flex items-center justify-between p-4 pb-2 border-b border-shuar-sand/50 dark:border-white/5";
+
+      const badgeColor = ex.language === 'shuar' ? 'bg-primary/10 text-primary' : 'bg-earth-brown/10 text-earth-brown';
+      const typeLabels = {
+        'flashcard': dict.ex_filter_flashcard || 'Flashcard',
+        'fill_blank': dict.ex_filter_exercise || 'Ejercicio',
+        'word_order': dict.ex_filter_exercise || 'Orden',
+        'multiple_choice': dict.ex_filter_exercise || 'Test',
+        'cultural_card': dict.ex_filter_culture || 'Cultura'
+      };
+
+      header.innerHTML = `
+        <div class="inline-flex gap-2">
+          <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${badgeColor}">${ex.language}</span>
+          <span class="text-[10px] font-bold uppercase py-0.5 text-gray-500">• ${(typeLabels[ex.type] || ex.type).toLowerCase()}</span>
+        </div>
+      `;
+      card.appendChild(header);
+
+      const body = document.createElement("div");
+      body.className = "p-5 flex flex-col flex-1 h-full overflow-y-auto";
+
+      if (ex.type === 'flashcard') {
+        renderFlashcard(body, ex, dict);
+      } else if (ex.type === 'fill_blank') {
+        renderFillBlank(body, ex, dict);
+      } else if (ex.type === 'word_order') {
+        renderWordOrder(body, ex, dict);
+      } else if (ex.type === 'multiple_choice') {
+        renderMultipleChoice(body, ex, dict);
+      } else if (ex.type === 'cultural_card') {
+        renderCulturalCard(body, ex, dict);
+      } else {
+        body.innerHTML = `<p class="text-sm text-gray-500">Unrecognized exercise type</p>`;
+      }
+
+      card.appendChild(body);
+      return card;
+    }
+
+    function renderFlashcard(parent, ex, dict) {
+      parent.className += " items-center text-center justify-center cursor-pointer group";
+      parent.style.perspective = "1000px";
+
+      const inner = document.createElement("div");
+      inner.className = "w-full transition-transform duration-500 relative h-full flex flex-col items-center justify-center";
+      inner.style.transformStyle = "preserve-3d";
+      let flipped = false;
+
+      const faceClass = "w-full h-full flex flex-col items-center justify-center absolute top-0 left-0 bg-white dark:bg-transparent";
+
+      const front = document.createElement("div");
+      front.className = faceClass;
+      front.style.backfaceVisibility = "hidden";
+      front.innerHTML = `<h3 class="text-2xl font-serif font-bold text-text-main dark:text-white mb-2 z-10 mx-2">${ex.content.front}</h3>
+                         <p class="text-[11px] text-primary group-hover:underline z-10">${dict.ex_btn_flip || 'Ver respuesta'}</p>`;
+
+      const back = document.createElement("div");
+      back.className = faceClass;
+      back.style.backfaceVisibility = "hidden";
+      back.style.transform = "rotateY(180deg)";
+      let backHtml = `<h3 class="text-xl font-serif font-bold text-text-main dark:text-white mb-1 mx-2">${ex.content.back}</h3>`;
+      if (ex.content.pronunciation) backHtml += `<p class="text-xs italic text-earth-brown dark:text-gray-400 mb-2">${ex.content.pronunciation}</p>`;
+      if (ex.content.example) backHtml += `<div class="bg-background-light dark:bg-white/5 p-2 rounded text-[11px] text-left w-full mt-2"><strong>Ej:</strong> ${ex.content.example}</div>`;
+      back.innerHTML = backHtml;
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "relative w-full h-full";
+      wrapper.appendChild(inner);
+      parent.appendChild(wrapper);
+
+      parent.onclick = () => {
+        flipped = !flipped;
+        inner.style.transform = flipped ? "rotateY(180deg)" : "rotateY(0deg)";
+      };
+    }
+
+    function renderFillBlank(parent, ex, dict) {
+      if (ex.title) parent.innerHTML += `<h4 class="font-bold text-xs text-earth-brown mb-2">${ex.title}</h4>`;
+      parent.innerHTML += `<p class="text-lg font-serif text-text-main dark:text-white mb-4 leading-relaxed fill-blank-sentence">${ex.content.sentence}</p>`;
+
+      const optsDiv = document.createElement("div");
+      optsDiv.className = "grid grid-cols-2 gap-2 mt-auto";
+
+      const feedback = document.createElement("div");
+      feedback.className = "mt-3 text-center font-bold text-sm hidden";
+
+      let answered = false;
+
+      ex.content.options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.className = "border border-shuar-sand dark:border-white/10 rounded-lg py-2 text-sm hover:bg-shuar-sand/30 dark:hover:bg-white/10 transition-colors";
+        btn.textContent = opt;
+        btn.onclick = () => {
+          if (answered) return;
+          answered = true;
+          const sentenceP = parent.querySelector(".fill-blank-sentence");
+          if (opt === ex.content.answer) {
+            btn.classList.add("bg-emerald-100", "border-emerald-500", "text-emerald-800", "dark:bg-emerald-900/40", "dark:text-emerald-400");
+            feedback.textContent = dict.ex_correct || "¡Correcto!";
+            feedback.className = "mt-3 text-center font-bold text-sm text-emerald-600 block dark:text-emerald-400";
+            sentenceP.innerHTML = ex.content.sentence.replace('____', `<span class="text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-600 dark:border-emerald-400 font-bold px-1">${opt}</span>`);
+          } else {
+            btn.classList.add("bg-red-100", "border-red-500", "text-red-800", "dark:bg-red-900/40", "dark:text-red-400");
+            feedback.textContent = dict.ex_incorrect || "Incorrecto";
+            feedback.className = "mt-3 text-center font-bold text-sm text-red-500 block dark:text-red-400";
+            sentenceP.innerHTML = ex.content.sentence.replace('____', `<span class="text-emerald-600 dark:text-emerald-400 border-b-2 border-emerald-600 dark:border-emerald-400 font-bold px-1">${ex.content.answer}</span>`);
+          }
+          if (ex.content.translation) {
+            feedback.innerHTML += `<p class="text-xs font-normal italic text-earth-brown dark:text-gray-400 mt-1">${ex.content.translation}</p>`;
+          }
+        };
+        optsDiv.appendChild(btn);
+      });
+
+      parent.appendChild(optsDiv);
+      parent.appendChild(feedback);
+    }
+
+    function renderMultipleChoice(parent, ex, dict) {
+      if (ex.title) parent.innerHTML += `<h4 class="font-bold text-xs text-earth-brown mb-2">${ex.title}</h4>`;
+      parent.innerHTML += `<p class="text-base font-serif font-bold text-text-main dark:text-white mb-4">${ex.content.question}</p>`;
+
+      const optsDiv = document.createElement("div");
+      optsDiv.className = "flex flex-col gap-1.5 mt-auto overflow-y-auto";
+
+      const feedback = document.createElement("div");
+      feedback.className = "mt-3 text-xs hidden p-2 rounded-lg bg-background-light dark:bg-white/5";
+
+      let answered = false;
+
+      ex.content.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "w-full text-left px-3 border border-shuar-sand dark:border-white/10 rounded-lg py-2 text-sm hover:bg-shuar-sand/30 dark:hover:bg-white/10 transition-colors";
+        btn.textContent = opt;
+        btn.onclick = () => {
+          if (answered) return;
+          answered = true;
+          if (idx === ex.content.correct) {
+            btn.classList.add("bg-emerald-100", "border-emerald-500", "text-emerald-800", "dark:bg-emerald-900/40", "dark:text-emerald-400");
+          } else {
+            btn.classList.add("bg-red-100", "border-red-500", "text-red-800", "dark:bg-red-900/40", "dark:text-red-400");
+            optsDiv.children[ex.content.correct].classList.add("border-emerald-500", "text-emerald-700", "bg-emerald-50", "dark:bg-emerald-900/20", "dark:text-emerald-400");
+          }
+
+          feedback.classList.remove("hidden");
+          const isCorrect = idx === ex.content.correct;
+          feedback.innerHTML = `<strong class="${isCorrect ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-500 dark:text-red-400'}">${isCorrect ? (dict.ex_correct || 'Correcto') : (dict.ex_incorrect || 'Incorrecto')}</strong>`;
+          if (ex.content.context) {
+            feedback.innerHTML += `<p class="text-earth-brown dark:text-gray-400 mt-1">${ex.content.context}</p>`;
+          }
+        };
+        optsDiv.appendChild(btn);
+      });
+
+      parent.appendChild(optsDiv);
+      parent.appendChild(feedback);
+    }
+
+    function renderWordOrder(parent, ex, dict) {
+      if (ex.title) parent.innerHTML += `<p class="text-xs text-earth-brown mb-3 font-bold">${ex.title}</p>`;
+
+      const wordsArea = document.createElement("div");
+      wordsArea.className = "flex flex-wrap gap-1 mb-4 min-h-[40px] p-2 border-2 border-dashed border-shuar-sand dark:border-white/10 rounded-lg items-center";
+
+      const poolArea = document.createElement("div");
+      poolArea.className = "flex flex-wrap gap-1.5 mb-2";
+
+      const selectedWords = [];
+      const pool = [...ex.content.words];
+      pool.sort(() => Math.random() - 0.5);
+
+      function updateUI() {
+        wordsArea.innerHTML = "";
+        poolArea.innerHTML = "";
+
+        selectedWords.forEach((word, idx) => {
+          const chip = document.createElement("div");
+          chip.className = "px-2 py-1 cursor-pointer bg-primary/10 text-primary border border-primary/20 rounded text-xs font-medium hover:bg-primary/20 transition-colors";
+          chip.textContent = word;
+          chip.onclick = () => {
+            if (btn.style.display === "none") return;
+            selectedWords.splice(idx, 1);
+            pool.push(word);
+            updateUI();
+          };
+          wordsArea.appendChild(chip);
+        });
+
+        pool.forEach((word, idx) => {
+          const chip = document.createElement("div");
+          chip.className = "px-2 py-1 cursor-pointer bg-white dark:bg-white/10 border border-shuar-sand dark:border-white/20 rounded shadow-sm text-xs hover:border-text-main transition-colors";
+          chip.textContent = word;
+          chip.onclick = () => {
+            if (btn.style.display === "none") return;
+            pool.splice(idx, 1);
+            selectedWords.push(word);
+            updateUI();
+          };
+          poolArea.appendChild(chip);
+        });
+      }
+
+      const btn = document.createElement("button");
+      btn.className = "w-full mt-auto bg-shuar-sand/50 hover:bg-shuar-sand text-text-main dark:text-white dark:bg-white/10 dark:hover:bg-white/20 font-medium py-2 rounded-lg text-sm transition-colors";
+      btn.textContent = dict.ex_btn_check || "Comprobar";
+
+      const feedback = document.createElement("div");
+      feedback.className = "mt-2 text-xs text-center hidden p-2 rounded bg-background-light dark:bg-white/5";
+
+      updateUI();
+
+      btn.onclick = () => {
+        if (selectedWords.length !== ex.content.correct_order.length) return;
+
+        const isCorrect = selectedWords.every((w, i) => w === ex.content.words[ex.content.correct_order[i]]);
+        feedback.classList.remove("hidden");
+
+        if (isCorrect) {
+          wordsArea.className = "flex flex-wrap gap-1 mb-4 min-h-[40px] p-2 border-2 border-solid border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg items-center";
+          feedback.innerHTML = `<span class="text-emerald-600 dark:text-emerald-400 font-bold">${dict.ex_correct || '¡Correcto!'}</span>`;
+        } else {
+          wordsArea.className = "flex flex-wrap gap-1 mb-4 min-h-[40px] p-2 border-2 border-solid border-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg items-center";
+          const correctStr = ex.content.correct_order.map(i => ex.content.words[i]).join(" ");
+          feedback.innerHTML = `<span class="text-red-500 dark:text-red-400 font-bold">${dict.ex_incorrect || 'Incorrecto'}</span><p class="text-[10px] text-earth-brown dark:text-gray-400 mt-1">Correcto: <strong>${correctStr}</strong></p>`;
+        }
+        if (ex.content.translation) {
+          feedback.innerHTML += `<p class="text-[10px] italic text-earth-brown dark:text-gray-400 mt-1">${ex.content.translation}</p>`;
+        }
+        btn.style.display = "none";
+        poolArea.style.display = "none";
+      };
+
+      parent.appendChild(wordsArea);
+      parent.appendChild(poolArea);
+      parent.appendChild(btn);
+      parent.appendChild(feedback);
+    }
+
+    function renderCulturalCard(parent, ex, dict) {
+      parent.innerHTML += `
+        <div class="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center mb-3">
+          <span class="material-symbols-outlined text-primary text-xl">local_library</span>
+        </div>
+        <h3 class="text-xl font-serif font-bold text-text-main dark:text-white mb-2">${ex.content.concept}</h3>
+        <p class="text-sm font-normal text-earth-brown dark:text-gray-300 mb-4 leading-relaxed">${ex.content.explanation}</p>
+      `;
+      if (ex.content.cultural_context) {
+        parent.innerHTML += `
+          <div class="mt-auto bg-background-light dark:bg-white/5 p-2.5 flex rounded-lg">
+            <span class="material-symbols-outlined text-primary/70 text-base mr-2 leading-none">info</span>
+            <p class="text-[11px] text-text-main dark:text-gray-400 leading-tight">${ex.content.cultural_context}</p>
+          </div>
+        `;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const filterEls = ["exercise-lang-filter", "exercise-type-filter", "exercise-diff-filter"];
+      filterEls.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener("change", applyFilters);
+      });
+
+      const loadMoreBtn = document.getElementById("exercises-load-more");
+      if (loadMoreBtn) loadMoreBtn.addEventListener("click", renderNextBatch);
+
+      const randBtn = document.getElementById("exercise-random-btn");
+      if (randBtn) randBtn.addEventListener("click", getRandomExercise);
+
+      fetchExercises();
+    });
   </script>
 </body>
 

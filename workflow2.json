@@ -1,0 +1,865 @@
+﻿{
+    "updatedAt":  "2026-03-04T20:07:10.134Z",
+    "createdAt":  "2026-03-04T04:50:40.241Z",
+    "id":  "t0QtjeORXn0C3e45",
+    "name":  "My workflow 2",
+    "description":  null,
+    "active":  true,
+    "isArchived":  false,
+    "nodes":  [
+                  {
+                      "parameters":  {
+                                         "rule":  {
+                                                      "interval":  [
+                                                                       {
+                                                                           "daysInterval":  3
+                                                                       }
+                                                                   ]
+                                                  }
+                                     },
+                      "id":  "af65226e-18ce-4d31-9cfd-2b32401d15ba",
+                      "name":  "Cada 3 días",
+                      "type":  "n8n-nodes-base.scheduleTrigger",
+                      "typeVersion":  1.2,
+                      "position":  [
+                                       -1984,
+                                       208
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "assignments":  {
+                                                             "assignments":  [
+                                                                                 {
+                                                                                     "id":  "queries-list",
+                                                                                     "name":  "queries",
+                                                                                     "value":  "={{ [\n  { \"q\": \"kichwa language linguistics research site:academia.edu OR site:jstor.org OR site:scielo.org\", \"type\": \"academic\", \"lang\": \"kichwa\" },\n  { \"q\": \"shuar language linguistics Ecuador research paper\", \"type\": \"academic\", \"lang\": \"shuar\" },\n  { \"q\": \"lengua kichwa vocabulario frases recursos libres\", \"type\": \"vocabulary\", \"lang\": \"kichwa\" },\n  { \"q\": \"kichwa quechua open educational resources OER free\", \"type\": \"vocabulary\", \"lang\": \"kichwa\" },\n  { \"q\": \"pueblos amazónicos Ecuador noticias 2025\", \"type\": \"news\", \"lang\": \"general\" },\n  { \"q\": \"indigenous amazonian languages preservation Ecuador 2025\", \"type\": \"academic\", \"lang\": \"general\" },\n  { \"q\": \"shuar achuar language learning free resources\", \"type\": \"vocabulary\", \"lang\": \"shuar\" },\n  { \"q\": \"kichwa grammar dictionary PDF free download\", \"type\": \"academic\", \"lang\": \"kichwa\" }\n] }}",
+                                                                                     "type":  "array"
+                                                                                 }
+                                                                             ]
+                                                         },
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "id":  "607d8ecf-1dc0-4cce-a1f5-6e650a1923be",
+                      "name":  "Definir Búsquedas",
+                      "type":  "n8n-nodes-base.set",
+                      "typeVersion":  3.4,
+                      "position":  [
+                                       -1760,
+                                       208
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "fieldToSplitOut":  "queries",
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "id":  "b3e01c8e-2a8a-491d-9c10-e9efb69c5019",
+                      "name":  "Loop por Query",
+                      "type":  "n8n-nodes-base.splitOut",
+                      "typeVersion":  1,
+                      "position":  [
+                                       -1536,
+                                       208
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "url":  "https://cse.google.com/cse?cx=537efd41e7ba34ab3",
+                                         "sendQuery":  true,
+                                         "queryParameters":  {
+                                                                 "parameters":  [
+                                                                                    {
+                                                                                        "name":  "key",
+                                                                                        "value":  "AIzaSyDYRr8IBmV8GKOwKMWZmQx3xYMlMjKEh3M"
+                                                                                    },
+                                                                                    {
+                                                                                        "name":  "cx",
+                                                                                        "value":  "537efd41e7ba34ab3"
+                                                                                    },
+                                                                                    {
+                                                                                        "name":  "q",
+                                                                                        "value":  "={{ $json.q }}"
+                                                                                    },
+                                                                                    {
+                                                                                        "name":  "num",
+                                                                                        "value":  "5"
+                                                                                    }
+                                                                                ]
+                                                             },
+                                         "options":  {
+                                                         "timeout":  10000
+                                                     }
+                                     },
+                      "id":  "fbc8640f-fc3d-4576-93d4-3f5bc0f7439d",
+                      "name":  "Google Custom Search",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       -1328,
+                                       208
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "jsCode":  "const items = $input.all();\nconst results = [];\nconst skipDomains = [\u0027pinterest\u0027, \u0027facebook.com\u0027, \u0027twitter.com\u0027, \u0027instagram.com\u0027, \u0027tiktok.com\u0027, \u0027reddit.com\u0027];\n\nfor (const item of items) {\n  const searchResults = item.json.items || [];\n  const queryQ = item.json.queries?.request?.[0]?.searchTerms || \u0027\u0027;\n  \n  let sourceType = \u0027academic\u0027;\n  if (queryQ.includes(\u0027vocabulario\u0027) || queryQ.includes(\u0027vocabulary\u0027) || queryQ.includes(\u0027frases\u0027) || queryQ.includes(\u0027learning\u0027)) sourceType = \u0027vocabulary\u0027;\n  if (queryQ.includes(\u0027noticias\u0027) || queryQ.includes(\u0027news\u0027)) sourceType = \u0027news\u0027;\n\n  for (const r of searchResults) {\n    const url = r.link || \u0027\u0027;\n    if (skipDomains.some(d =\u003e url.includes(d))) continue;\n    results.push({\n      json: {\n        title: r.title || \u0027\u0027,\n        url,\n        snippet: r.snippet || \u0027\u0027,\n        source_type: sourceType,\n        display_link: r.displayLink || \u0027\u0027\n      }\n    });\n  }\n}\n\nreturn results.length \u003e 0 ? results : [{ json: { _empty: true } }];"
+                                     },
+                      "id":  "b4367707-b5fd-4ec1-9850-9bac54b01fc6",
+                      "name":  "Extraer Resultados",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -1104,
+                                       208
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+                                         "sendQuery":  true,
+                                         "queryParameters":  {
+                                                                 "parameters":  [
+                                                                                    {
+                                                                                        "name":  "key",
+                                                                                        "value":  "AIzaSyCbSgY1AcwyAAL4oQD0smWopmlWG-j4_Zc"
+                                                                                    }
+                                                                                ]
+                                                             },
+                                         "sendHeaders":  true,
+                                         "headerParameters":  {
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "Content-Type",
+                                                                                         "value":  "application/json"
+                                                                                     }
+                                                                                 ]
+                                                              },
+                                         "sendBody":  true,
+                                         "bodyParameters":  {
+                                                                "parameters":  [
+                                                                                   {
+
+                                                                                   }
+                                                                               ]
+                                                            },
+                                         "options":  {
+                                                         "timeout":  15000
+                                                     }
+                                     },
+                      "id":  "288b6b73-54d7-4972-af40-db6440e3b79d",
+                      "name":  "Gemini – Analizar",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       -656,
+                                       112
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "jsCode":  "const items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  try {\n    const raw = item.json.candidates?.[0]?.content?.parts?.[0]?.text || \u0027{}\u0027;\n    const clean = raw.replace(/```json\\n?/g, \u0027\u0027).replace(/```\\n?/g, \u0027\u0027).trim();\n    const analysis = JSON.parse(clean);\n\n    if (analysis.relevant === true \u0026\u0026 (analysis.relevance_score || 0) \u003e= 7) {\n      results.push({\n        json: {\n          title: item.json.title || \u0027\u0027,\n          url: item.json.url || \u0027\u0027,\n          source_type: analysis.content_type || item.json.source_type || \u0027other\u0027,\n          language: analysis.language || \u0027general\u0027,\n          summary: analysis.summary || \u0027\u0027,\n          relevance_score: analysis.relevance_score || 7,\n          tags: analysis.tags || [],\n          display_link: item.json.display_link || \u0027\u0027\n        }\n      });\n    }\n  } catch (e) {\n    // JSON malformado de Gemini, ignorar\n  }\n}\n\nreturn results.length \u003e 0 ? results : [{ json: { _skip: true } }];"
+                                     },
+                      "id":  "ffba11b0-6294-425d-8d78-f5a79b50160e",
+                      "name":  "Parsear Gemini",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -448,
+                                       112
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "conditions":  {
+                                                            "conditions":  [
+                                                                               {
+                                                                                   "id":  "skip-check",
+                                                                                   "leftValue":  "={{ $json._skip }}",
+                                                                                   "rightValue":  true,
+                                                                                   "operator":  {
+                                                                                                    "type":  "boolean",
+                                                                                                    "operation":  "notEquals"
+                                                                                                }
+                                                                               }
+                                                                           ],
+                                                            "combinator":  "and"
+                                                        },
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "id":  "8b5fc689-fad1-4b14-b012-1ef913569b0c",
+                      "name":  "Filtrar por Relevancia",
+                      "type":  "n8n-nodes-base.if",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -224,
+                                       112
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "method":  "POST",
+                                         "url":  "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/resources",
+                                         "sendHeaders":  true,
+                                         "headerParameters":  {
+                                                                  "parameters":  [
+                                                                                     {
+                                                                                         "name":  "apikey",
+                                                                                         "value":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTY3NzAsImV4cCI6MjA4ODE3Mjc3MH0.RufdQk3H77nDZjykmYUvU1FHEcmdhJmRzvZgV03Flec"
+                                                                                     },
+                                                                                     {
+                                                                                         "name":  "Authorization",
+                                                                                         "value":  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTY3NzAsImV4cCI6MjA4ODE3Mjc3MH0.RufdQk3H77nDZjykmYUvU1FHEcmdhJmRzvZgV03Flec"
+                                                                                     },
+                                                                                     {
+                                                                                         "name":  "Content-Type",
+                                                                                         "value":  "application/json"
+                                                                                     },
+                                                                                     {
+                                                                                         "name":  "Prefer",
+                                                                                         "value":  "resolution=ignore-duplicates,return=minimal"
+                                                                                     }
+                                                                                 ]
+                                                              },
+                                         "sendBody":  true,
+                                         "bodyParameters":  {
+                                                                "parameters":  [
+                                                                                   {
+
+                                                                                   }
+                                                                               ]
+                                                            },
+                                         "options":  {
+
+                                                     }
+                                     },
+                      "id":  "37160cf2-7d64-4250-9e17-bb41dc385cc7",
+                      "name":  "Guardar en Supabase",
+                      "type":  "n8n-nodes-base.httpRequest",
+                      "typeVersion":  4.2,
+                      "position":  [
+                                       0,
+                                       0
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "jsCode":  "const items = $input.all();\nreturn [{ json: { status: \u0027completado\u0027, guardados: items.length, timestamp: new Date().toISOString() } }];"
+                                     },
+                      "id":  "713a27f5-18e7-4cab-a3ad-e44abeae2d1b",
+                      "name":  "Log Final",
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       224,
+                                       0
+                                   ]
+                  },
+                  {
+                      "parameters":  {
+                                         "jsCode":  "const results = [];\nfor (const item of $input.all()) {\n  if (!item.json._empty) {\n    results.push(item);\n  }\n}\nreturn results.length \u003e 0 ? results : [];"
+                                     },
+                      "type":  "n8n-nodes-base.code",
+                      "typeVersion":  2,
+                      "position":  [
+                                       -880,
+                                       208
+                                   ],
+                      "id":  "5d81e4bb-4721-42a9-944a-327bc1bb973c",
+                      "name":  "Code in JavaScript"
+                  }
+              ],
+    "connections":  {
+                        "Cada 3 días":  {
+                                            "main":  [
+                                                         [
+                                                             {
+                                                                 "node":  "Definir Búsquedas",
+                                                                 "type":  "main",
+                                                                 "index":  0
+                                                             }
+                                                         ]
+                                                     ]
+                                        },
+                        "Definir Búsquedas":  {
+                                                  "main":  [
+                                                               [
+                                                                   {
+                                                                       "node":  "Loop por Query",
+                                                                       "type":  "main",
+                                                                       "index":  0
+                                                                   }
+                                                               ]
+                                                           ]
+                                              },
+                        "Loop por Query":  {
+                                               "main":  [
+                                                            [
+                                                                {
+                                                                    "node":  "Google Custom Search",
+                                                                    "type":  "main",
+                                                                    "index":  0
+                                                                }
+                                                            ]
+                                                        ]
+                                           },
+                        "Google Custom Search":  {
+                                                     "main":  [
+                                                                  [
+                                                                      {
+                                                                          "node":  "Extraer Resultados",
+                                                                          "type":  "main",
+                                                                          "index":  0
+                                                                      }
+                                                                  ]
+                                                              ]
+                                                 },
+                        "Extraer Resultados":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Code in JavaScript",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               },
+                        "Gemini – Analizar":  {
+                                                  "main":  [
+                                                               [
+                                                                   {
+                                                                       "node":  "Parsear Gemini",
+                                                                       "type":  "main",
+                                                                       "index":  0
+                                                                   }
+                                                               ]
+                                                           ]
+                                              },
+                        "Parsear Gemini":  {
+                                               "main":  [
+                                                            [
+                                                                {
+                                                                    "node":  "Filtrar por Relevancia",
+                                                                    "type":  "main",
+                                                                    "index":  0
+                                                                }
+                                                            ]
+                                                        ]
+                                           },
+                        "Filtrar por Relevancia":  {
+                                                       "main":  [
+                                                                    [
+                                                                        {
+                                                                            "node":  "Guardar en Supabase",
+                                                                            "type":  "main",
+                                                                            "index":  0
+                                                                        }
+                                                                    ]
+                                                                ]
+                                                   },
+                        "Guardar en Supabase":  {
+                                                    "main":  [
+                                                                 [
+                                                                     {
+                                                                         "node":  "Log Final",
+                                                                         "type":  "main",
+                                                                         "index":  0
+                                                                     }
+                                                                 ]
+                                                             ]
+                                                },
+                        "Code in JavaScript":  {
+                                                   "main":  [
+                                                                [
+                                                                    {
+                                                                        "node":  "Gemini – Analizar",
+                                                                        "type":  "main",
+                                                                        "index":  0
+                                                                    }
+                                                                ]
+                                                            ]
+                                               }
+                    },
+    "settings":  {
+                     "executionOrder":  "v1",
+                     "binaryMode":  "separate",
+                     "availableInMCP":  true
+                 },
+    "staticData":  {
+                       "node:Cada 3 días":  {
+                                                "recurrenceRules":  [
+
+                                                                    ]
+                                            }
+                   },
+    "meta":  null,
+    "pinData":  {
+
+                },
+    "versionId":  "c1614135-a961-4128-bab6-9a0097490aad",
+    "activeVersionId":  "1334fd37-f12e-4499-888c-cfb812e94e6e",
+    "versionCounter":  15,
+    "triggerCount":  1,
+    "shared":  [
+                   {
+                       "updatedAt":  "2026-03-04T04:50:40.247Z",
+                       "createdAt":  "2026-03-04T04:50:40.247Z",
+                       "role":  "workflow:owner",
+                       "workflowId":  "t0QtjeORXn0C3e45",
+                       "projectId":  "dsXLMFkb8t0vxt73",
+                       "project":  {
+                                       "updatedAt":  "2026-03-04T04:23:22.479Z",
+                                       "createdAt":  "2026-02-22T18:25:25.345Z",
+                                       "id":  "dsXLMFkb8t0vxt73",
+                                       "name":  "Tsunki Shacay \u003cheytsunki@gmail.com\u003e",
+                                       "type":  "personal",
+                                       "icon":  null,
+                                       "description":  null,
+                                       "creatorId":  "f507fc1a-15ad-417b-9bf4-ec53ac503014"
+                                   }
+                   }
+               ],
+    "tags":  [
+
+             ],
+    "activeVersion":  {
+                          "updatedAt":  "2026-03-04T19:37:54.000Z",
+                          "createdAt":  "2026-03-04T04:50:40.253Z",
+                          "versionId":  "1334fd37-f12e-4499-888c-cfb812e94e6e",
+                          "workflowId":  "t0QtjeORXn0C3e45",
+                          "nodes":  [
+                                        {
+                                            "parameters":  {
+                                                               "rule":  {
+                                                                            "interval":  [
+                                                                                             {
+                                                                                                 "daysInterval":  3
+                                                                                             }
+                                                                                         ]
+                                                                        }
+                                                           },
+                                            "id":  "af65226e-18ce-4d31-9cfd-2b32401d15ba",
+                                            "name":  "Cada 3 días",
+                                            "type":  "n8n-nodes-base.scheduleTrigger",
+                                            "typeVersion":  1.2,
+                                            "position":  [
+                                                             -1984,
+                                                             208
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "assignments":  {
+                                                                                   "assignments":  [
+                                                                                                       {
+                                                                                                           "id":  "queries-list",
+                                                                                                           "name":  "queries",
+                                                                                                           "value":  "={{ [\n  { \"q\": \"kichwa language linguistics research site:academia.edu OR site:jstor.org OR site:scielo.org\", \"type\": \"academic\", \"lang\": \"kichwa\" },\n  { \"q\": \"shuar language linguistics Ecuador research paper\", \"type\": \"academic\", \"lang\": \"shuar\" },\n  { \"q\": \"lengua kichwa vocabulario frases recursos libres\", \"type\": \"vocabulary\", \"lang\": \"kichwa\" },\n  { \"q\": \"kichwa quechua open educational resources OER free\", \"type\": \"vocabulary\", \"lang\": \"kichwa\" },\n  { \"q\": \"pueblos amazónicos Ecuador noticias 2025\", \"type\": \"news\", \"lang\": \"general\" },\n  { \"q\": \"indigenous amazonian languages preservation Ecuador 2025\", \"type\": \"academic\", \"lang\": \"general\" },\n  { \"q\": \"shuar achuar language learning free resources\", \"type\": \"vocabulary\", \"lang\": \"shuar\" },\n  { \"q\": \"kichwa grammar dictionary PDF free download\", \"type\": \"academic\", \"lang\": \"kichwa\" }\n] }}",
+                                                                                                           "type":  "array"
+                                                                                                       }
+                                                                                                   ]
+                                                                               },
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "id":  "607d8ecf-1dc0-4cce-a1f5-6e650a1923be",
+                                            "name":  "Definir Búsquedas",
+                                            "type":  "n8n-nodes-base.set",
+                                            "typeVersion":  3.4,
+                                            "position":  [
+                                                             -1760,
+                                                             208
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "fieldToSplitOut":  "queries",
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "id":  "b3e01c8e-2a8a-491d-9c10-e9efb69c5019",
+                                            "name":  "Loop por Query",
+                                            "type":  "n8n-nodes-base.splitOut",
+                                            "typeVersion":  1,
+                                            "position":  [
+                                                             -1536,
+                                                             208
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "url":  "https://www.googleapis.com/customsearch/v1",
+                                                               "sendQuery":  true,
+                                                               "queryParameters":  {
+                                                                                       "parameters":  [
+                                                                                                          {
+                                                                                                              "name":  "key",
+                                                                                                              "value":  "TU_GOOGLE_API_KEY"
+                                                                                                          },
+                                                                                                          {
+                                                                                                              "name":  "cx",
+                                                                                                              "value":  "TU_SEARCH_ENGINE_ID"
+                                                                                                          },
+                                                                                                          {
+                                                                                                              "name":  "q",
+                                                                                                              "value":  "={{ $json.q }}"
+                                                                                                          },
+                                                                                                          {
+                                                                                                              "name":  "num",
+                                                                                                              "value":  "5"
+                                                                                                          }
+                                                                                                      ]
+                                                                                   },
+                                                               "options":  {
+                                                                               "timeout":  10000
+                                                                           }
+                                                           },
+                                            "id":  "fbc8640f-fc3d-4576-93d4-3f5bc0f7439d",
+                                            "name":  "Google Custom Search",
+                                            "type":  "n8n-nodes-base.httpRequest",
+                                            "typeVersion":  4.2,
+                                            "position":  [
+                                                             -1328,
+                                                             208
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "jsCode":  "const items = $input.all();\nconst results = [];\nconst skipDomains = [\u0027pinterest\u0027, \u0027facebook.com\u0027, \u0027twitter.com\u0027, \u0027instagram.com\u0027, \u0027tiktok.com\u0027, \u0027reddit.com\u0027];\n\nfor (const item of items) {\n  const searchResults = item.json.items || [];\n  const queryQ = item.json.queries?.request?.[0]?.searchTerms || \u0027\u0027;\n  \n  let sourceType = \u0027academic\u0027;\n  if (queryQ.includes(\u0027vocabulario\u0027) || queryQ.includes(\u0027vocabulary\u0027) || queryQ.includes(\u0027frases\u0027) || queryQ.includes(\u0027learning\u0027)) sourceType = \u0027vocabulary\u0027;\n  if (queryQ.includes(\u0027noticias\u0027) || queryQ.includes(\u0027news\u0027)) sourceType = \u0027news\u0027;\n\n  for (const r of searchResults) {\n    const url = r.link || \u0027\u0027;\n    if (skipDomains.some(d =\u003e url.includes(d))) continue;\n    results.push({\n      json: {\n        title: r.title || \u0027\u0027,\n        url,\n        snippet: r.snippet || \u0027\u0027,\n        source_type: sourceType,\n        display_link: r.displayLink || \u0027\u0027\n      }\n    });\n  }\n}\n\nreturn results.length \u003e 0 ? results : [{ json: { _empty: true } }];"
+                                                           },
+                                            "id":  "b4367707-b5fd-4ec1-9850-9bac54b01fc6",
+                                            "name":  "Extraer Resultados",
+                                            "type":  "n8n-nodes-base.code",
+                                            "typeVersion":  2,
+                                            "position":  [
+                                                             -1104,
+                                                             208
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "conditions":  {
+                                                                                  "conditions":  [
+                                                                                                     {
+                                                                                                         "id":  "not-empty",
+                                                                                                         "leftValue":  "={{ $json._empty }}",
+                                                                                                         "rightValue":  true,
+                                                                                                         "operator":  {
+                                                                                                                          "type":  "boolean",
+                                                                                                                          "operation":  "notEquals"
+                                                                                                                      }
+                                                                                                     }
+                                                                                                 ],
+                                                                                  "combinator":  "and"
+                                                                              },
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "id":  "59aa7177-3f80-4ebd-8f39-b039769ec345",
+                                            "name":  "Filtrar Vacíos",
+                                            "type":  "n8n-nodes-base.if",
+                                            "typeVersion":  2,
+                                            "position":  [
+                                                             -880,
+                                                             208
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "method":  "POST",
+                                                               "url":  "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+                                                               "sendQuery":  true,
+                                                               "queryParameters":  {
+                                                                                       "parameters":  [
+                                                                                                          {
+                                                                                                              "name":  "key",
+                                                                                                              "value":  "TU_GEMINI_API_KEY"
+                                                                                                          }
+                                                                                                      ]
+                                                                                   },
+                                                               "sendHeaders":  true,
+                                                               "headerParameters":  {
+                                                                                        "parameters":  [
+                                                                                                           {
+                                                                                                               "name":  "Content-Type",
+                                                                                                               "value":  "application/json"
+                                                                                                           }
+                                                                                                       ]
+                                                                                    },
+                                                               "sendBody":  true,
+                                                               "bodyParameters":  {
+                                                                                      "parameters":  [
+                                                                                                         {
+
+                                                                                                         }
+                                                                                                     ]
+                                                                                  },
+                                                               "options":  {
+                                                                               "timeout":  15000
+                                                                           }
+                                                           },
+                                            "id":  "288b6b73-54d7-4972-af40-db6440e3b79d",
+                                            "name":  "Gemini – Analizar",
+                                            "type":  "n8n-nodes-base.httpRequest",
+                                            "typeVersion":  4.2,
+                                            "position":  [
+                                                             -656,
+                                                             112
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "jsCode":  "const items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  try {\n    const raw = item.json.candidates?.[0]?.content?.parts?.[0]?.text || \u0027{}\u0027;\n    const clean = raw.replace(/```json\\n?/g, \u0027\u0027).replace(/```\\n?/g, \u0027\u0027).trim();\n    const analysis = JSON.parse(clean);\n\n    if (analysis.relevant === true \u0026\u0026 (analysis.relevance_score || 0) \u003e= 7) {\n      results.push({\n        json: {\n          title: item.json.title || \u0027\u0027,\n          url: item.json.url || \u0027\u0027,\n          source_type: analysis.content_type || item.json.source_type || \u0027other\u0027,\n          language: analysis.language || \u0027general\u0027,\n          summary: analysis.summary || \u0027\u0027,\n          relevance_score: analysis.relevance_score || 7,\n          tags: analysis.tags || [],\n          display_link: item.json.display_link || \u0027\u0027\n        }\n      });\n    }\n  } catch (e) {\n    // JSON malformado de Gemini, ignorar\n  }\n}\n\nreturn results.length \u003e 0 ? results : [{ json: { _skip: true } }];"
+                                                           },
+                                            "id":  "ffba11b0-6294-425d-8d78-f5a79b50160e",
+                                            "name":  "Parsear Gemini",
+                                            "type":  "n8n-nodes-base.code",
+                                            "typeVersion":  2,
+                                            "position":  [
+                                                             -448,
+                                                             112
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "conditions":  {
+                                                                                  "conditions":  [
+                                                                                                     {
+                                                                                                         "id":  "skip-check",
+                                                                                                         "leftValue":  "={{ $json._skip }}",
+                                                                                                         "rightValue":  true,
+                                                                                                         "operator":  {
+                                                                                                                          "type":  "boolean",
+                                                                                                                          "operation":  "notEquals"
+                                                                                                                      }
+                                                                                                     }
+                                                                                                 ],
+                                                                                  "combinator":  "and"
+                                                                              },
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "id":  "8b5fc689-fad1-4b14-b012-1ef913569b0c",
+                                            "name":  "Filtrar por Relevancia",
+                                            "type":  "n8n-nodes-base.if",
+                                            "typeVersion":  2,
+                                            "position":  [
+                                                             -224,
+                                                             112
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "method":  "POST",
+                                                               "url":  "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/resources",
+                                                               "sendHeaders":  true,
+                                                               "headerParameters":  {
+                                                                                        "parameters":  [
+                                                                                                           {
+                                                                                                               "name":  "apikey",
+                                                                                                               "value":  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTY3NzAsImV4cCI6MjA4ODE3Mjc3MH0.RufdQk3H77nDZjykmYUvU1FHEcmdhJmRzvZgV03Flec"
+                                                                                                           },
+                                                                                                           {
+                                                                                                               "name":  "Authorization",
+                                                                                                               "value":  "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1OTY3NzAsImV4cCI6MjA4ODE3Mjc3MH0.RufdQk3H77nDZjykmYUvU1FHEcmdhJmRzvZgV03Flec"
+                                                                                                           },
+                                                                                                           {
+                                                                                                               "name":  "Content-Type",
+                                                                                                               "value":  "application/json"
+                                                                                                           },
+                                                                                                           {
+                                                                                                               "name":  "Prefer",
+                                                                                                               "value":  "resolution=ignore-duplicates,return=minimal"
+                                                                                                           }
+                                                                                                       ]
+                                                                                    },
+                                                               "sendBody":  true,
+                                                               "bodyParameters":  {
+                                                                                      "parameters":  [
+                                                                                                         {
+
+                                                                                                         }
+                                                                                                     ]
+                                                                                  },
+                                                               "options":  {
+
+                                                                           }
+                                                           },
+                                            "id":  "37160cf2-7d64-4250-9e17-bb41dc385cc7",
+                                            "name":  "Guardar en Supabase",
+                                            "type":  "n8n-nodes-base.httpRequest",
+                                            "typeVersion":  4.2,
+                                            "position":  [
+                                                             0,
+                                                             0
+                                                         ]
+                                        },
+                                        {
+                                            "parameters":  {
+                                                               "jsCode":  "const items = $input.all();\nreturn [{ json: { status: \u0027completado\u0027, guardados: items.length, timestamp: new Date().toISOString() } }];"
+                                                           },
+                                            "id":  "713a27f5-18e7-4cab-a3ad-e44abeae2d1b",
+                                            "name":  "Log Final",
+                                            "type":  "n8n-nodes-base.code",
+                                            "typeVersion":  2,
+                                            "position":  [
+                                                             224,
+                                                             0
+                                                         ]
+                                        }
+                                    ],
+                          "connections":  {
+                                              "Cada 3 días":  {
+                                                                  "main":  [
+                                                                               [
+                                                                                   {
+                                                                                       "node":  "Definir Búsquedas",
+                                                                                       "type":  "main",
+                                                                                       "index":  0
+                                                                                   }
+                                                                               ]
+                                                                           ]
+                                                              },
+                                              "Definir Búsquedas":  {
+                                                                        "main":  [
+                                                                                     [
+                                                                                         {
+                                                                                             "node":  "Loop por Query",
+                                                                                             "type":  "main",
+                                                                                             "index":  0
+                                                                                         }
+                                                                                     ]
+                                                                                 ]
+                                                                    },
+                                              "Loop por Query":  {
+                                                                     "main":  [
+                                                                                  [
+                                                                                      {
+                                                                                          "node":  "Google Custom Search",
+                                                                                          "type":  "main",
+                                                                                          "index":  0
+                                                                                      }
+                                                                                  ]
+                                                                              ]
+                                                                 },
+                                              "Google Custom Search":  {
+                                                                           "main":  [
+                                                                                        [
+                                                                                            {
+                                                                                                "node":  "Extraer Resultados",
+                                                                                                "type":  "main",
+                                                                                                "index":  0
+                                                                                            }
+                                                                                        ]
+                                                                                    ]
+                                                                       },
+                                              "Extraer Resultados":  {
+                                                                         "main":  [
+                                                                                      [
+                                                                                          {
+                                                                                              "node":  "Filtrar Vacíos",
+                                                                                              "type":  "main",
+                                                                                              "index":  0
+                                                                                          }
+                                                                                      ]
+                                                                                  ]
+                                                                     },
+                                              "Filtrar Vacíos":  {
+                                                                     "main":  [
+                                                                                  [
+                                                                                      {
+                                                                                          "node":  "Gemini – Analizar",
+                                                                                          "type":  "main",
+                                                                                          "index":  0
+                                                                                      }
+                                                                                  ]
+                                                                              ]
+                                                                 },
+                                              "Gemini – Analizar":  {
+                                                                        "main":  [
+                                                                                     [
+                                                                                         {
+                                                                                             "node":  "Parsear Gemini",
+                                                                                             "type":  "main",
+                                                                                             "index":  0
+                                                                                         }
+                                                                                     ]
+                                                                                 ]
+                                                                    },
+                                              "Parsear Gemini":  {
+                                                                     "main":  [
+                                                                                  [
+                                                                                      {
+                                                                                          "node":  "Filtrar por Relevancia",
+                                                                                          "type":  "main",
+                                                                                          "index":  0
+                                                                                      }
+                                                                                  ]
+                                                                              ]
+                                                                 },
+                                              "Filtrar por Relevancia":  {
+                                                                             "main":  [
+                                                                                          [
+                                                                                              {
+                                                                                                  "node":  "Guardar en Supabase",
+                                                                                                  "type":  "main",
+                                                                                                  "index":  0
+                                                                                              }
+                                                                                          ]
+                                                                                      ]
+                                                                         },
+                                              "Guardar en Supabase":  {
+                                                                          "main":  [
+                                                                                       [
+                                                                                           {
+                                                                                               "node":  "Log Final",
+                                                                                               "type":  "main",
+                                                                                               "index":  0
+                                                                                           }
+                                                                                       ]
+                                                                                   ]
+                                                                      }
+                                          },
+                          "authors":  "Tsunki Shacay",
+                          "name":  "IPIAK_SCRAPER",
+                          "description":  "",
+                          "autosaved":  true,
+                          "workflowPublishHistory":  [
+                                                         {
+                                                             "createdAt":  "2026-03-04T19:37:54.603Z",
+                                                             "id":  1,
+                                                             "workflowId":  "t0QtjeORXn0C3e45",
+                                                             "versionId":  "1334fd37-f12e-4499-888c-cfb812e94e6e",
+                                                             "event":  "activated",
+                                                             "userId":  "f507fc1a-15ad-417b-9bf4-ec53ac503014"
+                                                         },
+                                                         {
+                                                             "createdAt":  "2026-03-04T19:38:19.542Z",
+                                                             "id":  3,
+                                                             "workflowId":  "t0QtjeORXn0C3e45",
+                                                             "versionId":  "1334fd37-f12e-4499-888c-cfb812e94e6e",
+                                                             "event":  "activated",
+                                                             "userId":  "f507fc1a-15ad-417b-9bf4-ec53ac503014"
+                                                         },
+                                                         {
+                                                             "createdAt":  "2026-03-04T19:38:19.523Z",
+                                                             "id":  2,
+                                                             "workflowId":  "t0QtjeORXn0C3e45",
+                                                             "versionId":  "1334fd37-f12e-4499-888c-cfb812e94e6e",
+                                                             "event":  "deactivated",
+                                                             "userId":  "f507fc1a-15ad-417b-9bf4-ec53ac503014"
+                                                         }
+                                                     ]
+                      }
+}

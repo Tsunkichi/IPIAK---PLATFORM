@@ -1,0 +1,567 @@
+{
+  "name": "IPIAK - Generador de Ejercicios (Gamificación)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 2
+            }
+          ]
+        }
+      },
+      "id": "56922894-45e4-464e-83f9-bb30268643f6",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1744,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "useQueryString": true,
+        "queryString": "name = 'fuentes' and mimeType = 'application/vnd.google-apps.folder' and trashed = false",
+        "options": {}
+      },
+      "alwaysOutputData": true,
+      "id": "f8a2b8e1-d2f1-41e7-a2b8-82bce6c75f5d",
+      "name": "Find Folder ID",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        -1536,
+        2880
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ggxxM0bgQfwAQJLs",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "list",
+        "useQueryString": true,
+        "queryString": "='\\'' + ($node[\"Find Folder ID\"].json[\"id\"] || \"\") + '\\' in parents and trashed=false'",
+        "options": {}
+      },
+      "id": "b669589b-87e1-41e7-a2b8-82bce6c75f5c",
+      "name": "List Drive Files",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        2880
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ggxxM0bgQfwAQJLs",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "drive_file_id"
+            },
+            {
+              "name": "status",
+              "value": "eq.processed"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "executeOnce": true,
+      "alwaysOutputData": true,
+      "id": "733a656c-700f-46c3-9573-18fadee2383f",
+      "name": "Get Processed Docs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1104,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const driveFiles = $('List Drive Files').all();\nconst processedDocs = $input.all();\n\nconsole.log(`Docs from Drive: ${driveFiles.length}`);\nconsole.log(`Docs in Supabase: ${processedDocs.length}`);\n\nconst processedIds = new Set(processedDocs\n  .filter(item => item.json && item.json.drive_file_id)\n  .map(item => item.json.drive_file_id));\n\nconst newFiles = driveFiles.filter(item => !processedIds.has(item.json.id));\n\nreturn newFiles;"
+      },
+      "id": "d023b1ae-6fe6-4f38-89b8-7c82d6b26d18",
+      "name": "Filter New Files",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -880,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "325357d8-75e0-49ab-9f36-8cf523be4de5",
+      "name": "Loop Files",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 1,
+      "position": [
+        -672,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=representation"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "filename",
+              "value": "={{ $node[\"Loop Files\"].json[\"name\"] }}"
+            },
+            {
+              "name": "drive_file_id",
+              "value": "={{ $node[\"Loop Files\"].json[\"id\"] }}"
+            },
+            {
+              "name": "status",
+              "value": "processing"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "27502f21-d415-4662-bc4c-2b6295562028",
+      "name": "Insert Processing Doc",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -448,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": "={{ $node[\"Loop Files\"].json[\"id\"] }}",
+        "options": {}
+      },
+      "id": "5ed95253-2a7b-44e7-81b7-14e0c788cae6",
+      "name": "Download PDF",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        2880
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "ggxxM0bgQfwAQJLs",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const binaryData = $node[\"Download PDF\"].binary.data.data;\nconst prompt = `Eres un lingüista y pedagogo especializado en lenguas indígenas amazónicas de Ecuador.\\n\\nAnaliza el siguiente documento y extrae TODO el contenido lingüísticamente valioso. Para cada fragmento útil, decide autónomamente qué tipo de ejercicio educativo tiene más sentido crear según el contenido:\\n\\n- Pares de vocabulario (palabra + traducción) → crea \\\"flashcard\\\"\\n- Frases con estructura clara → crea \\\"fill_blank\\\" \\n- Oraciones completas con gramática visible → crea \\\"word_order\\\"\\n- Conceptos con múltiples posibles respuestas → crea \\\"multiple_choice\\\"\\n- Elementos culturales o contextuales → crea \\\"cultural_card\\\"\\n\\nReglas:\\n1. Sé generoso: un documento puede y debe producir 20-50 ejercicios\\n2. Identifica el idioma de cada ejercicio: \\\"kichwa\\\", \\\"shuar\\\", o \\\"general\\\"\\n3. Asigna dificultad: \\\"basic\\\", \\\"intermediate\\\", o \\\"advanced\\\"\\n4. El campo \\\"content\\\" debe seguir exactamente el schema del tipo elegido\\n5. Responde ÚNICAMENTE con un array JSON válido, sin markdown.\\n\\nSchema de cada ejercicio:\\n{\\n  \\\"type\\\": \\\"flashcard|fill_blank|word_order|multiple_choice|cultural_card\\\",\\n  \\\"language\\\": \\\"kichwa|shuar|general\\\",\\n  \\\"difficulty\\\": \\\"basic|intermediate|advanced\\\",\\n  \\\"title\\\": \\\"título corto descriptivo\\\",\\n  \\\"content\\\": { ...según tipo... }\\n}`;\n\nreturn {\n  json: {\n    payload: {\n      contents: [\n        {\n          parts: [\n            { text: prompt },\n            {\n              inlineData: {\n                mimeType: \"application/pdf\",\n                data: binaryData\n              }\n            }\n          ]\n        }\n      ],\n      generationConfig: {\n        responseMimeType: \"application/json\"\n      }\n    }\n  }\n};"
+      },
+      "id": "e6a2b8e1-d2f1-41e7-a2b8-82bce6c75f5d",
+      "name": "Prepare Gemini Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -16,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "AIzaSyCbSgY1AcwyAAL4oQD0smWopmlWG-j4_Zc"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.payload }}",
+        "options": {}
+      },
+      "id": "40d29476-600a-409b-8ec8-11e57a4298bf",
+      "name": "Gemini Multimodal",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        208,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "try {\n  const geminiResponseText = $json.candidates[0].content.parts[0].text;\n  \n  let cleanJson = geminiResponseText.trim();\n  if (cleanJson.startsWith('```json')) {\n    cleanJson = cleanJson.substring(7);\n  }\n  if (cleanJson.startsWith('```')) {\n    cleanJson = cleanJson.substring(3);\n  }\n  if (cleanJson.endsWith('```')) {\n    cleanJson = cleanJson.substring(0, cleanJson.length - 3);\n  }\n  \n  const exercises = JSON.parse(cleanJson);\n  const docId = $node[\"Insert Processing Doc\"].json[\"id\"];\n  \n  const supabasePayload = exercises.map(ex => ({\n    type: ex.type,\n    language: ex.language,\n    difficulty: ex.difficulty,\n    title: ex.title,\n    content: ex.content,\n    source_document: docId,\n    active: true\n  }));\n  \n  return { json: { supabasePayload, total: supabasePayload.length, docId } };\n} catch (e) {\n  throw new Error(\"Fallo al parsear el JSON de Gemini: \" + e.message);\n}"
+      },
+      "id": "a487cbba-1a0b-4887-9905-ee4b801ccbe9",
+      "name": "Parse Exercises",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        432,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/exercises",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            },
+            {
+              "name": "Prefer",
+              "value": "resolution=ignore-duplicates"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ $json.supabasePayload }}",
+        "options": {}
+      },
+      "id": "f18de514-97de-46ba-8432-34ef29125069",
+      "name": "Insert Exercises",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        640,
+        2880
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "='https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents?id=eq.' + $node[\"Parse Exercises\"].json[\"docId\"]",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "processed"
+            },
+            {
+              "name": "exercises_generated",
+              "value": "={{ $node[\"Parse Exercises\"].json[\"total\"] }}"
+            },
+            {
+              "name": "processed_at",
+              "value": "={{ new Date().toISOString() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bbdf8a97-9b54-4c7b-845f-00758b1f6915",
+      "name": "Update Doc Success",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        848,
+        2880
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "a519fb27-cb99-4216-b46b-24fe14e5770a",
+      "name": "Error Trigger",
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        2672
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "='https://ftjsycxqhgqxuerispud.supabase.co/rest/v1/documents?id=eq.' + $node[\"Insert Processing Doc\"].json[\"id\"]",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0anN5Y3hxaGdxeHVlcmlzcHVkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU5Njc3MCwiZXhwIjoyMDg4MTcyNzcwfQ.3mhBjhxeAL7X9rqFopM4e0zSLyj0HunnnXfS9jCAm7U"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "status",
+              "value": "error"
+            },
+            {
+              "name": "error_message",
+              "value": "={{ $json.execution.error.message }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "5e1a442e-005c-41b7-848a-cd6bdeda987b",
+      "name": "Update Doc Error",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -256,
+        2672
+      ]
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Find Folder ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find Folder ID": {
+      "main": [
+        [
+          {
+            "node": "List Drive Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Drive Files": {
+      "main": [
+        [
+          {
+            "node": "Get Processed Docs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Processed Docs": {
+      "main": [
+        [
+          {
+            "node": "Filter New Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter New Files": {
+      "main": [
+        [
+          {
+            "node": "Loop Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Files": {
+      "main": [
+        [
+          {
+            "node": "Insert Processing Doc",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Insert Processing Doc": {
+      "main": [
+        [
+          {
+            "node": "Download PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download PDF": {
+      "main": [
+        [
+          {
+            "node": "Prepare Gemini Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Gemini Payload": {
+      "main": [
+        [
+          {
+            "node": "Gemini Multimodal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gemini Multimodal": {
+      "main": [
+        [
+          {
+            "node": "Parse Exercises",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Exercises": {
+      "main": [
+        [
+          {
+            "node": "Insert Exercises",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert Exercises": {
+      "main": [
+        [
+          {
+            "node": "Update Doc Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Doc Success": {
+      "main": [
+        [
+          {
+            "node": "Loop Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Update Doc Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "id": "FnxrQShYBTVphQ3r"
+}
